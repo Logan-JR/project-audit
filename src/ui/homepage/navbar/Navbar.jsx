@@ -7,25 +7,25 @@ const Navbar = () => {
     <nav className={styles.container}>
       <ul className={styles.list}>
         <li>
-          <Link href={""}>Other</Link>
+          <Link href={"/"}>Home</Link>
         </li>
         <li>
-          <Link href={""}>Other</Link>
+          <Link href={""}>About</Link>
         </li>
         <li>
-          <Link href={""}>Other</Link>
+          <Link href={""}>Contact</Link>
         </li>
       </ul>
       <Image src="/uatf.png" alt="" width={100} height={120} />
       <ul className={styles.list}>
         <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
           <Link href="/dashboard">Admin</Link>
         </li>
         <li>
           <Link href="/academic">Academic</Link>
+        </li>
+        <li>
+          <Link href="/courses">Courses</Link>
         </li>
       </ul>
     </nav>

@@ -89,7 +89,7 @@ export const menuAcademic = [
     title: "Pages",
     list: [
       {
-        title: "Academic",
+        title: "Dashboard",
         path: "/academic",
         icon: <MdDashboard />,
       },
@@ -112,6 +112,59 @@ export const menuAcademic = [
   },
   {
     title: "Cerrar Sesión",
+    list: [
+      {
+        title: "Logout",
+        path: "/",
+        icon: <MdLogout />,
+      },
+    ],
+  },
+];
+
+export const menuCourses = [
+  {
+    title: "Pages",
+    list: [
+      {
+        title: "Dashboard",
+        path: "/courses",
+        icon: <MdDashboard />,
+      },
+      {
+        title: "Courses",
+        path: "/courses/course",
+        icon: <MdSupervisedUserCircle />,
+      },
+      {
+        title: "Products",
+        path: "",
+        icon: <MdShoppingBag />,
+      },
+      {
+        title: "Transactions",
+        path: "",
+        icon: <MdAttachMoney />,
+      },
+    ],
+  },
+  {
+    title: "User",
+    list: [
+      {
+        title: "Settings",
+        path: "/dashboard/settings",
+        icon: <MdOutlineSettings />,
+      },
+      {
+        title: "Help",
+        path: "/dashboard/help",
+        icon: <MdHelpCenter />,
+      },
+    ],
+  },
+  {
+    title: "Cerrar Sesion",
     list: [
       {
         title: "Logout",
