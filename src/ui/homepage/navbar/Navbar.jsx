@@ -13,7 +13,7 @@ const Navbar = () => {
           <Link href={""}>About</Link>
         </li>
         <li>
-          <Link href={""}>Contact</Link>
+          <Link href="/login">Login</Link>
         </li>
       </ul>
       <Image src="/uatf.png" alt="" width={100} height={120} />
