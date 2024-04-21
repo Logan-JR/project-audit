@@ -174,3 +174,38 @@ export const menuCourses = [
     ],
   },
 ];
+
+export const usuarios = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "jhon@email.com",
+    createdAt: "2024-04-21T01:22:12.641+00:00",
+    role: "admin",
+    status: "active",
+  },
+  {
+    id: "2",
+    name: "Mark Bowen",
+    email: "mark@email.com",
+    createdAt: "2024-04-21T01:22:12.641+00:00",
+    role: "Secretario",
+    status: "active",
+  },
+  {
+    id: "3",
+    name: "Moises Stain",
+    email: "moises@email.com",
+    createdAt: "2024-04-21T01:22:12.641+00:00",
+    role: "admin",
+    status: "inactive",
+  },
+  {
+    id: "4",
+    name: "Saul Parker",
+    email: "saul@email.com",
+    createdAt: "2024-04-21T01:22:12.641+00:00",
+    role: "Cursos",
+    status: "active",
+  },
+];
