@@ -17,12 +17,12 @@ export const menuAdmin = [
     list: [
       {
         title: "Dashboard",
-        path: "/dashboard",
+        path: "/cpa",
         icon: <MdDashboard />,
       },
       {
         title: "Users",
-        path: "/dashboard/users",
+        path: "/cpa/users",
         icon: <MdSupervisedUserCircle />,
       },
       {

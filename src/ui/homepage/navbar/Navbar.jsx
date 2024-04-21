@@ -19,7 +19,7 @@ const Navbar = () => {
       <Image src="/uatf.png" alt="" width={100} height={120} />
       <ul className={styles.list}>
         <li>
-          <Link href="/dashboard">Admin</Link>
+          <Link href="/cpa">Admin</Link>
         </li>
         <li>
           <Link href="/academic">Academic</Link>
