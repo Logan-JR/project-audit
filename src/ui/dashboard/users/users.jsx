@@ -52,9 +52,6 @@ const UserPage = async () => {
                       View
                     </button>
                   </Link>
-                  <button className={`${styles.button} ${styles.delete}`}>
-                    Delete
-                  </button>
                 </div>
               </td>
             </tr>

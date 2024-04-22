@@ -8,7 +8,7 @@ const Sidebar = ({ menuItems }) => {
       <div className={styles.user}>
         <Image
           className={styles.userImage}
-          src="/noavatar.png"
+          src={"https://rickandmortyapi.com/api/character/avatar/1.jpeg" || "/noavatar.png"}
           alt=""
           width="50"
           height="50"

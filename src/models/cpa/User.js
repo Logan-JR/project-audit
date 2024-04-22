@@ -33,7 +33,6 @@ const userSchema = new Schema({
   },
   img: {
     type: String,
-    default: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
   },
   createdAt: {
     type: Date,
