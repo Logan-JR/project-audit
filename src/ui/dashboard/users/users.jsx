@@ -38,7 +38,7 @@ const UserPage = async () => {
                     height={40}
                     className={styles.userImage}
                   />
-                  {user.name}
+                  {user.username}
                 </div>
               </td>
               <td>{user.email}</td>

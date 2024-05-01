@@ -6,7 +6,8 @@ import { useRouter, useParams } from "next/navigation";
 
 const FormUser = () => {
   const [newUser, setNewUser] = useState({
-    name: "",
+    username: "",
+    fullname: "",
     email: "",
     password: "",
     phone: "",
@@ -22,7 +23,8 @@ const FormUser = () => {
     const res = await fetch(`/api/cpa/users/${params.id}`);
     const data = await res.json();
     setNewUser({
-      name: data.name,
+      username: data.username,
+      fullname: data.fullname,
       email: data.email,
       password: data.password,
       phone: data.phone,
@@ -111,10 +113,18 @@ const FormUser = () => {
           <label>Username</label>
           <input
             type="text"
-            name="name"
+            name="username"
             placeholder="username"
             onChange={handleChange}
-            value={newUser.name}
+            value={newUser.username}
+          />
+          <label>Fullname</label>
+          <input
+            type="text"
+            name="fullname"
+            placeholder="fullname"
+            onChange={handleChange}
+            value={newUser.fullname}
           />
           <label>Email</label>
           <input
