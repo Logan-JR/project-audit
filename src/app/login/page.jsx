@@ -2,8 +2,10 @@
 import styles from "@/ui/login/login.module.css";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const LoginPage = () => {
+  const [error, setError] = useState("");
   const route = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,18 +15,29 @@ const LoginPage = () => {
       password: formData.get("password"),
       redirect: false,
     });
+    if (res?.error) setError(res.error);
     if (res?.ok) return route.push("/cpa");
   };
+
+  const handlerChange = () => setError("");
 
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
+        {error && <div className={styles.error}> {error} </div>}
         <p>Login</p>
-        <input type="email" placeholder="Email" name="email" required />
+        <input
+          type="email"
+          placeholder="Email"
+          name="email"
+          onChange={handlerChange}
+          required
+        />
         <input
           type="password"
           placeholder="password"
           name="password"
+          onChange={handlerChange}
           required
         />
         <button>Login</button>

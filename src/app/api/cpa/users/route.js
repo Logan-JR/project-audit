@@ -15,10 +15,10 @@ export const POST = async (request) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     data.password = hashedPassword;
     const newUser = new User(data);
-    console.log(data)
     const saveUser = await newUser.save();
     return NextResponse.json(saveUser);
   } catch (error) {
+    console.log(error)
     return NextResponse.json(error.message, {
       status: 400,
     });

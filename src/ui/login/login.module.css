@@ -42,3 +42,9 @@
   cursor: pointer;
   border-radius: 5px;
 }
+
+.error {
+  padding: 10px 8px;
+  border-radius: 5px;
+  background-color: rgb(235, 53, 89);
+}

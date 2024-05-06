@@ -23,12 +23,12 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         await connectDB();
         const userFound = await User.findOne({ email: credentials?.email });
-        if (!userFound) throw new Error("Invalid credentials");
+        if (!userFound) throw new Error("Credenciales no validas");
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           userFound.password
         );
-        if (!passwordMatch) throw new Error("Invalid credentials");
+        if (!passwordMatch) throw new Error("Credenciales no validas");
         return userFound;
       },
     }),
@@ -42,6 +42,9 @@ const handler = NextAuth({
       session.user = token.user;
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
   },
 });
 
