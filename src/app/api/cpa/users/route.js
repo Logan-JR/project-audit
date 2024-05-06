@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/utils/database";
+import { connectDB } from "@/libs/database";
 import User from "@/models/cpa/User";
+import bcrypt from "bcryptjs";
 
 export const GET = async () => {
   connectDB();
@@ -10,8 +11,11 @@ export const GET = async () => {
 
 export const POST = async (request) => {
   try {
-    const data = await request.json();
+    let data = await request.json();
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data.password = hashedPassword;
     const newUser = new User(data);
+    console.log(data)
     const saveUser = await newUser.save();
     return NextResponse.json(saveUser);
   } catch (error) {

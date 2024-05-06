@@ -110,7 +110,7 @@ const FormUser = () => {
       </div>
       <div className={styles.formContainer}>
         <form action={handleSubmit} className={styles.form}>
-          <label>Username</label>
+          <label>Nombre de Usuario</label>
           <input
             type="text"
             name="username"
@@ -118,7 +118,7 @@ const FormUser = () => {
             onChange={handleChange}
             value={newUser.username}
           />
-          <label>Fullname</label>
+          <label>Nombre Completo</label>
           <input
             type="text"
             name="fullname"
@@ -126,7 +126,7 @@ const FormUser = () => {
             onChange={handleChange}
             value={newUser.fullname}
           />
-          <label>Email</label>
+          <label>Correo</label>
           <input
             type="email"
             name="email"
@@ -134,7 +134,7 @@ const FormUser = () => {
             onChange={handleChange}
             value={newUser.email}
           />
-          <label>Password</label>
+          <label>Contraseña</label>
           <input
             type="password"
             name="password"
@@ -142,7 +142,7 @@ const FormUser = () => {
             onChange={handleChange}
             value={newUser.password}
           />
-          <label>Phone</label>
+          <label>Telefono</label>
           <input
             type="text"
             name="phone"
@@ -150,7 +150,7 @@ const FormUser = () => {
             onChange={handleChange}
             value={newUser.phone}
           />
-          <label>Choose a Rol</label>
+          <label>Elige un Rol</label>
           <select
             name="role"
             id="role"
@@ -161,7 +161,7 @@ const FormUser = () => {
             <option value="secretario">Secretario</option>
             <option value="cursos">Responsable Cursos</option>
           </select>
-          <label>Status</label>
+          <label>Estado</label>
           <select
             name="status"
             id="status"
@@ -169,7 +169,7 @@ const FormUser = () => {
             value={newUser.status}
           >
             <option value="active">Active</option>
-            <option value="Inactive">Inactive</option>
+            <option value="inactive">Inactive</option>
           </select>
           <button type="submit">{!params.id ? "Create" : "Update"}</button>
           {!params.id ? (

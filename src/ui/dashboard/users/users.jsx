@@ -3,7 +3,7 @@ import Link from "next/link";
 import Search from "@/ui/dashboard/search/search";
 import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/dashboard/users/users.module.css";
-import { loadUsers } from "@/utils/data";
+import { loadUsers } from "@/libs/data";
 
 const UserPage = async () => {
   const listUsers = await loadUsers();
@@ -18,12 +18,12 @@ const UserPage = async () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Created At</td>
-            <td>Role</td>
-            <td>Status</td>
-            <td>Action</td>
+            <td>Nombre</td>
+            <td>Correo</td>
+            <td>Creado en</td>
+            <td>Rol</td>
+            <td>Estado</td>
+            <td>Acciones</td>
           </tr>
         </thead>
         <tbody>

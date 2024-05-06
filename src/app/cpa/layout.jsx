@@ -2,7 +2,7 @@ import Navbar from '@/ui/dashboard/navbar/navbar'
 import Sidebar from '@/ui/dashboard/sidebar/sidebar'
 import styles from '@/ui/dashboard/dashboard.module.css'
 import Footer from '@/ui/dashboard/footer/footer'
-import { menuAdmin } from '@/data/data'
+import { menuAdmin } from '@/utils/data'
 
 
 const Layout = ({ children }) => {
