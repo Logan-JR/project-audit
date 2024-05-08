@@ -9,14 +9,18 @@ const LoginPage = () => {
   const route = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const res = await signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
-      redirect: false,
-    });
-    if (res?.error) setError(res.error);
-    if (res?.ok) return route.push("/cpa");
+    try {
+      const formData = new FormData(e.currentTarget);
+      const res = await signIn("credentials", {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        redirect: false,
+      });
+      if (res?.error) setError(res.error);
+      if (res?.ok) return route.push("/cpa");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlerChange = () => setError("");

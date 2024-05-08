@@ -1,21 +1,30 @@
+"use client";
 import MenuLink from "./menuLink/menuLink";
 import Image from "next/image";
 import styles from "@/ui/dashboard/sidebar/sidebar.module.css";
+import { signOut, useSession } from "next-auth/react";
 
 const Sidebar = ({ menuItems }) => {
+  const { data: session, status } = useSession();
+  let image = "/noavatar.png";
+  if (status !== "loading") image = session?.user.img;
+
   return (
     <div className={styles.container}>
       <div className={styles.user}>
         <Image
           className={styles.userImage}
-          src={"https://rickandmortyapi.com/api/character/avatar/1.jpeg" || "/noavatar.png"}
+          src={image}
           alt=""
           width="50"
           height="50"
         />
         <div className={styles.userDetail}>
-          <span className={styles.username}>John Rivera</span>
-          <span className={styles.userTitle}>Administrador</span>
+          <span className={styles.username}> {session?.user.username} </span>
+          <span className={styles.userTitle}> {session?.user.role} </span>
+          <button onClick={signOut} className={styles.logout}>
+            Cerrar Sesión
+          </button>
         </div>
       </div>
       <ul className={styles.list}>
