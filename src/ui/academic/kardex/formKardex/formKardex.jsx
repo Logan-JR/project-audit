@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/ui/dashboard/users/formUser/formUser.module.css";
+import styles from "@/ui/cpa/users/formUser/formUser.module.css";
 import { useRouter, useParams } from "next/navigation";
+import { useSession } from 'next-auth/react'
 
 const FormUser = () => {
+  const {data: session} = useSession()
   const [newUser, setNewUser] = useState({
     username: "",
     fullname: "",
@@ -14,8 +16,8 @@ const FormUser = () => {
     role: "admin",
     status: "activo",
     img: `https://rickandmortyapi.com/api/character/avatar/${Math.floor(Math.random() * 826) + 1}.jpeg`,
+    modifiedBy: session?.user,
   });
-
   const route = useRouter();
   const params = useParams();
 
@@ -31,6 +33,7 @@ const FormUser = () => {
       role: data.role,
       status: data.status,
       img: data.img,
+      modifiedBy: session.user,
     });
   };
 
@@ -73,6 +76,13 @@ const FormUser = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
+        const resUp = await fetch(`/api/cpa/users/${params.id}`, {
+          method: "PUT",
+          body: JSON.stringify(newUser),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const res = await fetch(`/api/cpa/users/${params.id}`, {
           method: "DELETE",
         });

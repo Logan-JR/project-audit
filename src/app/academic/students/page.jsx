@@ -1,9 +1,10 @@
-import Users from '@/ui/dashboard/users/users'
+import Kardex from '@/ui/academic/kardex/kardex'
 
 const StudentsPage = () => {
   return (
     <div>
-      <Users />
+      StudentsPage
+      <Kardex />
     </div>
   )
 }

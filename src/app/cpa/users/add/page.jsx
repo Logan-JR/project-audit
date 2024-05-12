@@ -1,4 +1,4 @@
-import FormUser from "@/ui/dashboard/users/formUser/formUser";
+import FormUser from "@/ui/cpa/users/formUser/formUser";
 
 const AddUserPage = () => {
   return (

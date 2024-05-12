@@ -40,6 +40,9 @@ const userSchema = new Schema(
     img: {
       type: String,
     },
+    modifiedBy: {
+      type: Schema.Types.Mixed,
+    },
   },
   {
     timestamps: true,

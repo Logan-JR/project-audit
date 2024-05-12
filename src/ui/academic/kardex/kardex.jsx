@@ -2,17 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import Search from "@/ui/dashboard/search/search";
 import Pagination from "@/ui/dashboard/pagination/pagination";
-import styles from "@/ui/dashboard/users/users.module.css";
+import styles from "@/ui/cpa/users/users.module.css";
 import { loadUsers } from "@/libs/data";
 
-const UserPage = async () => {
+const KardexPage = async () => {
   const listUsers = await loadUsers();
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Search for a user..." />
-        <Link href="/cpa/users/add">
-          <button className={styles.addButton}>Add New</button>
+        <Search placeholder="Buscar Kardex..." />
+        <Link href="/academic/students/add">
+          <button className={styles.addButton}>Agregar nuevo</button>
         </Link>
       </div>
       <table className={styles.table}>
@@ -47,9 +47,9 @@ const UserPage = async () => {
               <td>{user.status}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/cpa/users/${user.id}`}>
+                  <Link href={`/academic/students/${user.id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
-                      View
+                      Ver
                     </button>
                   </Link>
                 </div>
@@ -63,4 +63,4 @@ const UserPage = async () => {
   );
 };
 
-export default UserPage;
+export default KardexPage;

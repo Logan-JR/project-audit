@@ -8,7 +8,6 @@ import {
   MdPeople,
   MdOutlineSettings,
   MdHelpCenter,
-  MdLogout,
 } from "react-icons/md";
 
 export const menuAdmin = [
@@ -72,16 +71,6 @@ export const menuAdmin = [
       },
     ],
   },
-  {
-    title: "Cerrar Sesion",
-    list: [
-      {
-        title: "Logout",
-        path: "/",
-        icon: <MdLogout />,
-      },
-    ],
-  },
 ];
 
 export const menuAcademic = [
@@ -94,19 +83,29 @@ export const menuAcademic = [
         icon: <MdDashboard />,
       },
       {
-        title: "Students",
+        title: "Kardex",
         path: "/academic/students",
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Products",
-        path: "",
-        icon: <MdShoppingBag />,
-      },
-      {
         title: "Reports",
         path: "",
-        icon: <MdAttachMoney />,
+        icon: <MdAnalytics />,
+      },
+    ],
+  },
+  {
+    title: "User",
+    list: [
+      {
+        title: "Settings",
+        path: "/dashboard/settings",
+        icon: <MdOutlineSettings />,
+      },
+      {
+        title: "Help",
+        path: "/dashboard/help",
+        icon: <MdHelpCenter />,
       },
     ],
   },
