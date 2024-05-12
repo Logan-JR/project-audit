@@ -116,7 +116,6 @@ const FormUser = () => {
         <div className={styles.imgContainer}>
           <Image src={newUser.img || "/noavatar.png"} alt="" width={300} height={300}/>
         </div>
-        {newUser.name}
       </div>
       <div className={styles.formContainer}>
         <form action={handleSubmit} className={styles.form}>

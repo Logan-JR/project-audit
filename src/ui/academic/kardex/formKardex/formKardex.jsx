@@ -1,54 +1,44 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/ui/cpa/users/formUser/formUser.module.css";
+import styles from "@/ui/academic/kardex/formKardex/formKardex.module.css";
 import { useRouter, useParams } from "next/navigation";
-import { useSession } from 'next-auth/react'
 
 const FormUser = () => {
-  const {data: session} = useSession()
-  const [newUser, setNewUser] = useState({
-    username: "",
-    fullname: "",
-    email: "",
-    password: "",
-    phone: "",
-    role: "admin",
-    status: "activo",
-    img: `https://rickandmortyapi.com/api/character/avatar/${Math.floor(Math.random() * 826) + 1}.jpeg`,
-    modifiedBy: session?.user,
+  const [newKardex, setNewKardex] = useState({
+    nombre: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
+    ci: "",
+    ru: "",
   });
   const route = useRouter();
   const params = useParams();
 
-  const getUser = async () => {
-    const res = await fetch(`/api/cpa/users/${params.id}`);
+  const getKardex = async () => {
+    const res = await fetch(`/api/academic/kardex/${params.id}`);
     const data = await res.json();
-    setNewUser({
-      username: data.username,
-      fullname: data.fullname,
-      email: data.email,
-      password: data.password,
-      phone: data.phone,
-      role: data.role,
-      status: data.status,
-      img: data.img,
-      modifiedBy: session.user,
+    setNewKardex({
+      nombre: data.nombre,
+      apellidoPaterno: data.apellidoPaterno,
+      apellidoMaterno: data.apellidoMaterno,
+      ci: data.ci,
+      ru: data.ru,
     });
   };
 
-  const createUser = async () => {
+  const createKardex = async () => {
     try {
-      const res = await fetch("/api/cpa/users", {
+      const res = await fetch("/api/academic/kardex", {
         method: "POST",
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(newKardex),
         headers: {
           "Content-Type": "application/json",
         },
       });
       const data = await res.json();
       if (res.status === 200) {
-        route.push("/cpa/users");
+        route.push("/academic/students");
         route.refresh();
       }
     } catch (error) {
@@ -56,17 +46,17 @@ const FormUser = () => {
     }
   };
 
-  const updateUser = async () => {
+  const updateKardex = async () => {
     try {
-      const res = await fetch(`/api/cpa/users/${params.id}`, {
+      const res = await fetch(`/api/academic/kardex/${params.id}`, {
         method: "PUT",
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(newKardex),
         headers: {
           "Content-Type": "application/json",
         },
       });
       const data = res.json();
-      route.push("/cpa/users");
+      route.push("/academic/students");
       route.refresh();
     } catch (error) {
       console.log(error);
@@ -74,19 +64,12 @@ const FormUser = () => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm("Are you sure you want to delete this kardex?")) {
       try {
-        const resUp = await fetch(`/api/cpa/users/${params.id}`, {
-          method: "PUT",
-          body: JSON.stringify(newUser),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const res = await fetch(`/api/cpa/users/${params.id}`, {
+        const res = await fetch(`/api/academic/kardex/${params.id}`, {
           method: "DELETE",
         });
-        route.push("/cpa/users");
+        route.push("/academic/students");
         route.refresh();
       } catch (error) {
         console.log(error);
@@ -95,93 +78,71 @@ const FormUser = () => {
   };
 
   const handleSubmit = async () => {
-    if (!params.id) await createUser();
+    if (!params.id) await createKardex();
     else {
-      updateUser();
+      updateKardex();
     }
   };
 
   const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+    setNewKardex({ ...newKardex, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
-    if (params.id) getUser();
+    if (params.id) getKardex();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src={newUser.img || "/noavatar.png"} alt="" width={300} height={300}/>
+          <Image
+            src={"/noavatar.png"}
+            alt=""
+            width={300}
+            height={300}
+          />
         </div>
-        {newUser.name}
       </div>
       <div className={styles.formContainer}>
         <form action={handleSubmit} className={styles.form}>
-          <label>Nombre de Usuario</label>
+          <label>Nombre</label>
           <input
             type="text"
-            name="username"
-            placeholder="username"
+            name="nombre"
             onChange={handleChange}
-            value={newUser.username}
+            value={newKardex.nombre}
           />
-          <label>Nombre Completo</label>
+          <label>Apellido Paterno</label>
           <input
             type="text"
-            name="fullname"
-            placeholder="fullname"
+            name="apellidoPaterno"
             onChange={handleChange}
-            value={newUser.fullname}
+            value={newKardex.apellidoPaterno}
           />
-          <label>Correo</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="user@email.com"
-            onChange={handleChange}
-            value={newUser.email}
-          />
-          <label>Contraseña</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="password"
-            onChange={handleChange}
-            value={newUser.password}
-          />
-          <label>Telefono</label>
+          <label>Apellido Materno</label>
           <input
             type="text"
-            name="phone"
-            placeholder="+591 12345678"
+            name="apellidoMaterno"
             onChange={handleChange}
-            value={newUser.phone}
+            value={newKardex.apellidoMaterno}
           />
-          <label>Elige un Rol</label>
-          <select
-            name="role"
-            id="role"
+          <label>RU</label>
+          <input
+            type="text"
+            name="ru"
             onChange={handleChange}
-            value={newUser.role}
-          >
-            <option value="admin">Administrador</option>
-            <option value="secretario">Secretario</option>
-            <option value="cursos">Responsable Cursos</option>
-          </select>
-          <label>Estado</label>
-          <select
-            name="status"
-            id="status"
+            value={newKardex.ru}
+          />
+          <label>CI</label>
+          <input
+            type="text"
+            name="ci"
             onChange={handleChange}
-            value={newUser.status}
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <button type="submit">{!params.id ? "Create" : "Update"}</button>
+            value={newKardex.ci}
+          />
+          <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
           {!params.id ? (
             ""
           ) : (
@@ -190,7 +151,7 @@ const FormUser = () => {
               type="button"
               onClick={handleDelete}
             >
-              Delete
+              Borrar
             </button>
           )}
         </form>

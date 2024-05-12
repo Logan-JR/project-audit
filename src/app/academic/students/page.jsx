@@ -3,7 +3,7 @@ import Kardex from '@/ui/academic/kardex/kardex'
 const StudentsPage = () => {
   return (
     <div>
-      StudentsPage
+      <h3>StudentsPage</h3>
       <Kardex />
     </div>
   )

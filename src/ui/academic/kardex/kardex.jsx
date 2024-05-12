@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Search from "@/ui/dashboard/search/search";
 import Pagination from "@/ui/dashboard/pagination/pagination";
-import styles from "@/ui/cpa/users/users.module.css";
-import { loadUsers } from "@/libs/data";
+import styles from "@/ui/academic/kardex/kardex.module.css";
+import { loadKardexs } from "@/libs/data";
 
 const KardexPage = async () => {
-  const listUsers = await loadUsers();
+  const listKardexs = await loadKardexs();
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -18,36 +18,36 @@ const KardexPage = async () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>Nombre</td>
-            <td>Correo</td>
+            <td>RU</td>
+            <td>CI</td>
+            <td>Estudiante</td>
             <td>Creado en</td>
-            <td>Rol</td>
-            <td>Estado</td>
+            <td>Actualizado en</td>
             <td>Acciones</td>
           </tr>
         </thead>
         <tbody>
-          {listUsers.map((user) => (
-            <tr key={user._id}>
+          {listKardexs.map((kardex) => (
+            <tr key={kardex._id}>
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={user.img || "/noavatar.png"}
+                    src={kardex.img || "/noavatar.png"}
                     alt=""
                     width={40}
                     height={40}
                     className={styles.userImage}
                   />
-                  {user.username}
+                  {kardex.ru}
                 </div>
               </td>
-              <td>{user.email}</td>
-              <td>{user.createdAt.toString().slice(0, 15)}</td>
-              <td>{user.role}</td>
-              <td>{user.status}</td>
+              <td>{kardex.ci}</td>
+              <td>{`${kardex.nombre} ${kardex.apellidoPaterno} ${kardex.apellidoMaterno}`}</td>
+              <td>{kardex.createdAt.toString().slice(0, 15)}</td>
+              <td>{kardex.updatedAt.toString().slice(0, 15)}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/academic/students/${user.id}`}>
+                  <Link href={`/academic/students/${kardex.id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver
                     </button>
