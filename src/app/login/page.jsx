@@ -17,7 +17,7 @@ const LoginPage = () => {
         redirect: false,
       });
       if (res?.error) setError(res.error);
-      if (res?.ok) return route.push("/cpa");
+      if (res?.ok) return route.push("/");
     } catch (error) {
       console.log(error);
     }

@@ -6,9 +6,18 @@
 
 .button {
   padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text);
+  border: none;
   cursor: pointer;
+  background-color: #5d57c9;
+}
+
+.button:hover {
+  background-color: teal;
 }
 
 .button:disabled {
+  background-color: gray;
   cursor: not-allowed;
 }
