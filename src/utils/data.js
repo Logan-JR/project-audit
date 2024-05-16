@@ -122,7 +122,7 @@ export const menuCourses = [
       },
       {
         title: "Courses",
-        path: "/courses/course",
+        path: "/courses/curso",
         icon: <MdSupervisedUserCircle />,
       },
       {
