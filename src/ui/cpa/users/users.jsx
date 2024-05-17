@@ -42,7 +42,7 @@ const UserPage = async () => {
                 </div>
               </td>
               <td>{user.email}</td>
-              <td>{user.createdAt.toString().slice(0, 15)}</td>
+              <td>{user.createdAt.toDateString()}</td>
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td>

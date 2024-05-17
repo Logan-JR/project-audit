@@ -43,8 +43,8 @@ const KardexPage = async () => {
               </td>
               <td>{kardex.ci}</td>
               <td>{`${kardex.nombre} ${kardex.apellidoPaterno} ${kardex.apellidoMaterno}`}</td>
-              <td>{kardex.createdAt.toString().slice(0, 15)}</td>
-              <td>{kardex.updatedAt.toString().slice(0, 15)}</td>
+              <td>{kardex.createdAt.toDateString()}</td>
+              <td>{kardex.updatedAt.toDateString()}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/academic/students/${kardex.id}`}>

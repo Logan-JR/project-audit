@@ -59,3 +59,7 @@
 .delete {
   background-color: crimson;
 }
+
+.view:hover {
+  background-color: #5d57c9;
+}
