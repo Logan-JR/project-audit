@@ -2,21 +2,21 @@ import { Schema, model, models } from "mongoose";
 
 const cursoSchema = new Schema(
   {
-    curso: {
+    course: {
       type: String,
       required: true,
       trim: true,
     },
-    modulo: {
+    modules: {
       type: String,
       required: true,
     },
-    horasAcademicas: {
+    academicHours: {
       type: String,
       required: true,
       trim: true,
     },
-    fecha: {
+    courseDate: {
       type: String,
       required: true,
       trim: true,

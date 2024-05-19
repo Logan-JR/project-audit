@@ -121,13 +121,13 @@ export const menuCourses = [
         icon: <MdDashboard />,
       },
       {
-        title: "Courses",
+        title: "Cursos",
         path: "/courses/curso",
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Products",
-        path: "",
+        title: "Inscripciones",
+        path: "/courses/inscription",
         icon: <MdShoppingBag />,
       },
       {

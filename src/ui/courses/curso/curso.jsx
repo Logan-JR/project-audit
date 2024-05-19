@@ -27,11 +27,11 @@ const CursoPage = async () => {
           {listCursos.map((curso) => (
             <tr key={curso._id}>
               <td>
-                <div className={styles.user}>{curso.curso}</div>
+                <div className={styles.user}>{curso.course}</div>
               </td>
-              <td>{curso.horasAcademicas}</td>
-              <td>{curso.modulo}</td>
-              <td>{curso.fecha}</td>
+              <td>{curso.academicHours}</td>
+              <td>{curso.modules}</td>
+              <td>{curso.courseDate}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/courses/curso/${curso._id}`}>

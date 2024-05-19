@@ -6,10 +6,10 @@ import { useRouter, useParams } from "next/navigation";
 
 const FormCurso = () => {
   const [newCurso, setNewCurso] = useState({
-    curso: "",
-    horasAcademicas: "",
-    modulo: "",
-    fecha: "",
+    course: "",
+    academicHours: "",
+    modules: "",
+    courseDate: "",
   });
   const route = useRouter();
   const params = useParams();
@@ -18,10 +18,10 @@ const FormCurso = () => {
     const res = await fetch(`/api/courses/curso/${params.id}`);
     const data = await res.json();
     setNewCurso({
-      curso: data.curso,
-      horasAcademicas: data.horasAcademicas,
-      modulo: data.modulo,
-      fecha: data.fecha,
+      course: data.course,
+      academicHours: data.academicHours,
+      modules: data.modules,
+      courseDate: data.courseDate,
     });
   };
 
@@ -103,30 +103,30 @@ const FormCurso = () => {
           <label>Curso</label>
           <input
             type="text"
-            name="curso"
+            name="course"
             onChange={handleChange}
-            value={newCurso.curso}
+            value={newCurso.course}
           />
           <label>Horas Academicas</label>
           <input
             type="text"
-            name="horasAcademicas"
+            name="academicHours"
             onChange={handleChange}
-            value={newCurso.horasAcademicas}
+            value={newCurso.academicHours}
           />
           <label>Modulos</label>
           <input
             type="text"
-            name="modulo"
+            name="modules"
             onChange={handleChange}
-            value={newCurso.modulo}
+            value={newCurso.modules}
           />
           <label>Fecha</label>
           <input
             type="text"
-            name="fecha"
+            name="courseDate"
             onChange={handleChange}
-            value={newCurso.fecha}
+            value={newCurso.courseDate}
           />
           <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
           {!params.id ? (
