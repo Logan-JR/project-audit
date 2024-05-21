@@ -13,37 +13,37 @@ import {
 
 const data = [
   {
-    name: "Sun",
+    name: "Ene",
     inscritos: 4000,
     abandono: 2400,
   },
   {
-    name: "Mon",
+    name: "Feb",
     inscritos: 3000,
     abandono: 1398,
   },
   {
-    name: "Tue",
+    name: "Mar",
     inscritos: 2000,
     abandono: 3800,
   },
   {
-    name: "Wed",
+    name: "Abr",
     inscritos: 2780,
     abandono: 3908,
   },
   {
-    name: "Thu",
+    name: "May",
     inscritos: 1890,
     abandono: 4800,
   },
   {
-    name: "Fri",
+    name: "Jun",
     inscritos: 2390,
     abandono: 3800,
   },
   {
-    name: "Sat",
+    name: "Jul",
     inscritos: 3490,
     abandono: 4300,
   },
