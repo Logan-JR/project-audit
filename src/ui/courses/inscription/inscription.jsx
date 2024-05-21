@@ -4,17 +4,23 @@ import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/courses/inscription/inscription.module.css";
 import { loadInscription } from "@/libs/data";
 
-const UserPage = async () => {
-  const list = await loadInscription();
+const UserPage = async ({ searchParams }) => {
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || 1;
+  const { count, inscription } = await loadInscription(q, page);
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Buscar..." />
-        <Link
-          href={`https://docs.google.com/spreadsheets/d/${process.env.DOCUMENT_ID}/edit?usp=sharing`}
-        >
-          <button className={styles.addButton}>Ver</button>
-        </Link>
+        <Search placeholder="Buscar CI" />
+        <div className={styles.containerBtn}>
+          <button className={styles.addButton}>Sincronizar</button>
+          <Link
+            href={`https://docs.google.com/spreadsheets/d/${process.env.DOCUMENT_ID}/edit?usp=sharing`}
+            target="_blank"
+          >
+            <button className={styles.addButton}>Ver</button>
+          </Link>
+        </div>
       </div>
       <table className={styles.table}>
         <thead>
@@ -29,7 +35,7 @@ const UserPage = async () => {
           </tr>
         </thead>
         <tbody>
-          {list.map((item) => (
+          {inscription.map((item) => (
             <tr key={item._id}>
               <td>
                 <div className={styles.user}>{item.ci}</div>
@@ -48,7 +54,7 @@ const UserPage = async () => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={count} />
     </div>
   );
 };

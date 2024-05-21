@@ -4,12 +4,14 @@ import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/courses/curso/curso.module.css";
 import { loadCurso } from "@/libs/data";
 
-const CursoPage = async () => {
-  const listCursos = await loadCurso();
+const CursoPage = async ({ searchParams }) => {
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || 1;
+  const { count, cursos } = await loadCurso(q, page);
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Buscar Curso..." />
+        <Search placeholder="Buscar..." />
         <Link href="/courses/curso/add">
           <button className={styles.addButton}>Agregar nuevo</button>
         </Link>
@@ -24,7 +26,7 @@ const CursoPage = async () => {
           </tr>
         </thead>
         <tbody>
-          {listCursos.map((curso) => (
+          {cursos.map((curso) => (
             <tr key={curso._id}>
               <td>
                 <div className={styles.user}>{curso.course}</div>
@@ -45,7 +47,7 @@ const CursoPage = async () => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={count} />
     </div>
   );
 };

@@ -11,6 +11,11 @@
   justify-content: space-between;
 }
 
+.containerBtn {
+  display: flex;
+  gap: 15px;
+}
+
 .addButton {
   padding: 10px;
   background-color: #5d57c9;

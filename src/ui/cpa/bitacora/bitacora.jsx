@@ -5,13 +5,15 @@ import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/cpa/bitacora/bitacora.module.css";
 import { loadBitacora } from "@/libs/data";
 
-const BitacoraPage = async () => {
-  const listUsers = await loadBitacora();
+const BitacoraPage = async ({ searchParams }) => {
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || 1;
+  const { count, bitacora } = await loadBitacora(q, page);
   return (
     <div className={styles.container}>
       <h2>Bitacora</h2>
       <div className={styles.top}>
-        <Search placeholder="Buscar log..." />
+        <Search placeholder="Buscar..." />
       </div>
       <table className={styles.table}>
         <thead>
@@ -24,7 +26,7 @@ const BitacoraPage = async () => {
           </tr>
         </thead>
         <tbody>
-          {listUsers.map((user) => (
+          {bitacora.map((user) => (
             <tr key={user._id}>
               <td>
                 <div className={styles.user}>
@@ -55,7 +57,7 @@ const BitacoraPage = async () => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={count} />
     </div>
   );
 };

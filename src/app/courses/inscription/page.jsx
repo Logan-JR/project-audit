@@ -1,10 +1,10 @@
-import Inscription from '@/ui/courses/inscription/inscription'
+import Inscription from "@/ui/courses/inscription/inscription";
 
-const InscriptionPage = async () => {
+const InscriptionPage = async ({ searchParams }) => {
   return (
     <div>
       <h3>InscriptionPage</h3>
-      <Inscription />
+      <Inscription searchParams={searchParams} />
     </div>
   );
 };

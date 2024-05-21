@@ -1,9 +1,9 @@
-import Curso from '@/ui/courses/curso/curso'
-const CursoPage = () => {
+import Curso from "@/ui/courses/curso/curso";
+const CursoPage = ({ searchParams }) => {
   return (
     <div>
       <h3>CursoPage</h3>
-      <Curso />
+      <Curso searchParams={searchParams} />
     </div>
   );
 };

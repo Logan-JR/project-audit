@@ -1,12 +1,12 @@
-import Kardex from '@/ui/academic/kardex/kardex'
+import Kardex from "@/ui/academic/kardex/kardex";
 
-const StudentsPage = () => {
+const StudentsPage = ({ searchParams }) => {
   return (
     <div>
       <h3>StudentsPage</h3>
-      <Kardex />
+      <Kardex searchParams={searchParams} />
     </div>
-  )
-}
+  );
+};
 
-export default StudentsPage
+export default StudentsPage;

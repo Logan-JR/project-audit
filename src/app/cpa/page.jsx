@@ -1,12 +1,12 @@
-import Bitacora from '@/ui/cpa/bitacora/bitacora'
+import Bitacora from "@/ui/cpa/bitacora/bitacora";
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ searchParams }) => {
   return (
     <div>
       <h3>AdminDashboard</h3>
-      <Bitacora />
+      <Bitacora searchParams={searchParams} />
     </div>
-  )
-}
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;

@@ -5,12 +5,14 @@ import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/cpa/users/users.module.css";
 import { loadUsers } from "@/libs/data";
 
-const UserPage = async () => {
-  const listUsers = await loadUsers();
+const UserPage = async ({ searchParams }) => {
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || 1;
+  const { count, users } = await loadUsers(q, page);
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Buscar usuario..." />
+        <Search placeholder="Buscar..." />
         <Link href="/cpa/users/add">
           <button className={styles.addButton}>Agregar nuevo</button>
         </Link>
@@ -27,7 +29,7 @@ const UserPage = async () => {
           </tr>
         </thead>
         <tbody>
-          {listUsers.map((user) => (
+          {users.map((user) => (
             <tr key={user._id}>
               <td>
                 <div className={styles.user}>
@@ -58,7 +60,7 @@ const UserPage = async () => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination count={count} />
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import Users from "@/ui/cpa/users/users";
 
-const UsersPage = () => {
+const UsersPage = ({searchParams}) => {
   return (
     <div>
       <h3>UsersPage</h3>
-      <Users />
+      <Users searchParams={searchParams} />
     </div>
   );
 };
