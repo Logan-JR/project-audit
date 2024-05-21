@@ -25,7 +25,7 @@ export const menuAdmin = [
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Estadisticas",
+        title: "Publicaciones",
         path: "",
         icon: <MdShoppingBag />,
       },
