@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/ui/courses/curso/formCurso/formKardex.module.css";
+import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
 
 const FormCurso = () => {

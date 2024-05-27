@@ -87,38 +87,7 @@ export const loadInscription = async (q, page) => {
     })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
-    await listSync();
     return { count, inscription };
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const listSync = async () => {
-  try {
-    const data = await sheets();
-    const inscription = await Inscription.find();
-    if (data.length != inscription.length) {
-      for (const e of data) {
-        const exists = await Inscription.findOne({ ci: e.ci });
-        try {
-          if (!exists) {
-            const newInscription = new Inscription(e);
-            const saveInscription = await newInscription.save();
-          } else {
-            const inscriptionUpdate = await Inscription.findByIdAndUpdate(
-              exists.id,
-              e,
-              {
-                new: true,
-              }
-            );
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
   } catch (error) {
     console.log(error);
   }

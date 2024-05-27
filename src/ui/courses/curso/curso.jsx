@@ -20,20 +20,38 @@ const CursoPage = async ({ searchParams }) => {
         <thead>
           <tr>
             <td>Curso</td>
-            <td>Horas Academicas</td>
-            <td>Modulos</td>
-            <td>Fecha</td>
+            <td>Modulo</td>
+            <td>Horas</td>
+            <td>Fecha de Inicio</td>
           </tr>
         </thead>
         <tbody>
           {cursos.map((curso) => (
-            <tr key={curso._id}>
+            <tr key={curso._id} className={styles.list}>
               <td>
                 <div className={styles.user}>{curso.course}</div>
               </td>
-              <td>{curso.academicHours}</td>
-              <td>{curso.modules}</td>
-              <td>{curso.courseDate}</td>
+              <td>
+                {curso.modules.map((mod) => (
+                  <ul key={mod._id}>
+                    <li>{mod.name}</li>
+                  </ul>
+                ))}
+              </td>
+              <td>
+                {curso.modules.map((mod) => (
+                  <ul key={mod._id}>
+                    <li>{mod.academicHours}</li>
+                  </ul>
+                ))}
+              </td>
+              <td>
+                {curso.modules.map((mod) => (
+                  <ul key={mod._id}>
+                    <li>{mod.date.toLocaleDateString()}</li>
+                  </ul>
+                ))}
+              </td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/courses/curso/${curso._id}`}>

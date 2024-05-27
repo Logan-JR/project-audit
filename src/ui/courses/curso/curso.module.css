@@ -67,3 +67,10 @@
 .view:hover {
   background-color: #5d57c9;
 }
+
+.list li {
+  list-style: none;
+  text-transform: capitalize;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
