@@ -1,3 +1,3 @@
-import FormCurso from "@/ui/courses/curso/formCurso/formCurso";
+import FormInscription from "@/ui/courses/inscription/formInscription/formInscription";
 
-export default FormCurso;
+export default FormInscription;

@@ -5,31 +5,40 @@ import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
 
 const FormCurso = () => {
-  const [newCurso, setNewCurso] = useState({
-    course: "",
-    academicHours: "",
-    modules: "",
-    courseDate: "",
-  });
+  const [newCurso, setNewCurso] = useState("");
+  const [modules, setModules] = useState([
+    { name: "", date: "", academicHours: "" },
+  ]);
   const route = useRouter();
   const params = useParams();
+
+  const handleAddModule = () => {
+    setModules([...modules, { name: "", date: "", academicHours: "" }]);
+  };
+
+  const handleRemoveModule = (index) => {
+    const newModules = modules.filter((_, i) => i !== index);
+    setModules(newModules);
+  };
+
+  const handleModuleChange = (index, e) => {
+    const newModules = [...modules];
+    newModules[index][e.target.name] = e.target.value;
+    setModules(newModules);
+  };
 
   const getCurso = async () => {
     const res = await fetch(`/api/courses/curso/${params.id}`);
     const data = await res.json();
-    setNewCurso({
-      course: data.course,
-      academicHours: data.academicHours,
-      modules: data.modules,
-      courseDate: data.courseDate,
-    });
+    setNewCurso(data.course);
+    setModules(data.modules);
   };
 
   const createCurso = async () => {
     try {
       const res = await fetch("/api/courses/curso", {
         method: "POST",
-        body: JSON.stringify(newCurso),
+        body: JSON.stringify({ course: newCurso, modules }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -48,7 +57,7 @@ const FormCurso = () => {
     try {
       const res = await fetch(`/api/courses/curso/${params.id}`, {
         method: "PUT",
-        body: JSON.stringify(newCurso),
+        body: JSON.stringify({ course: newCurso, modules }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -82,10 +91,6 @@ const FormCurso = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setNewCurso({ ...newCurso, [e.target.name]: e.target.value });
-  };
-
   useEffect(() => {
     if (params.id) getCurso();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,34 +105,54 @@ const FormCurso = () => {
       </div>
       <div className={styles.formContainer}>
         <form action={handleSubmit} className={styles.form}>
-          <label>Curso</label>
-          <input
-            type="text"
-            name="course"
-            onChange={handleChange}
-            value={newCurso.course}
-          />
-          <label>Horas Academicas</label>
-          <input
-            type="text"
-            name="academicHours"
-            onChange={handleChange}
-            value={newCurso.academicHours}
-          />
-          <label>Modulos</label>
-          <input
-            type="text"
-            name="modules"
-            onChange={handleChange}
-            value={newCurso.modules}
-          />
-          <label>Fecha</label>
-          <input
-            type="text"
-            name="courseDate"
-            onChange={handleChange}
-            value={newCurso.courseDate}
-          />
+          <div>
+            <label>Curso</label>
+            <input
+              type="text"
+              value={newCurso}
+              onChange={(e) => setNewCurso(e.target.value)}
+              required
+            />
+          </div>
+
+          {modules.map((module, index) => (
+            <div key={index}>
+              <label>Modulo</label>
+              <input
+                type="text"
+                name="name"
+                value={module.name}
+                onChange={(e) => handleModuleChange(index, e)}
+                required
+              />
+
+              <label>Fecha</label>
+              <input
+                type="text"
+                name="date"
+                placeholder="Ej. yyyy-mm-dd"
+                onChange={(e) => handleModuleChange(index, e)}
+                required
+              />
+
+              <label>Horas</label>
+              <input
+                type="number"
+                name="academicHours"
+                value={module.academicHours}
+                onChange={(e) => handleModuleChange(index, e)}
+                required
+              />
+
+              <button type="button" onClick={() => handleRemoveModule(index)}>
+                Eliminar Modulo
+              </button>
+            </div>
+          ))}
+
+          <button type="button" onClick={handleAddModule}>
+            Nuevo Modulo
+          </button>
           <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
           {!params.id ? (
             ""

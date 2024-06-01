@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import { cursoSchema } from "@/models/courses/Curso";
 
 const inscriptionSchema = new Schema(
   {
@@ -22,23 +23,13 @@ const inscriptionSchema = new Schema(
       type: String,
       trim: true,
     },
-    course: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    modules: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     email: {
       type: String,
       required: true,
       unique: true,
     },
-    inscriptionDate: {
-      type: String,
+    course: {
+      type: [cursoSchema],
       required: true,
     },
   },

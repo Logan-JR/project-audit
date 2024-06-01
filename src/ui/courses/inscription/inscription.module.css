@@ -33,6 +33,11 @@
   padding: 10px;
 }
 
+.table ul {
+  list-style: none;
+  text-transform: capitalize;
+}
+
 .user {
   display: flex;
   align-items: center;
@@ -55,6 +60,10 @@
   color: var(--text);
   border: none;
   cursor: pointer;
+}
+
+.nameCap {
+  text-transform: capitalize;
 }
 
 .view {

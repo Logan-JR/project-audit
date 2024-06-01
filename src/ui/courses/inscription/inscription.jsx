@@ -4,7 +4,7 @@ import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/courses/inscription/inscription.module.css";
 import { loadInscription } from "@/libs/data";
 
-const UserPage = async ({ searchParams }) => {
+const InscriptionPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
   const { count, inscription } = await loadInscription(q, page);
@@ -13,12 +13,8 @@ const UserPage = async ({ searchParams }) => {
       <div className={styles.top}>
         <Search placeholder="Buscar CI" />
         <div className={styles.containerBtn}>
-          <button className={styles.addButton}>Sincronizar</button>
-          <Link
-            href={`https://docs.google.com/spreadsheets/d/${process.env.DOCUMENT_ID}/edit?usp=sharing`}
-            target="_blank"
-          >
-            <button className={styles.addButton}>Ver</button>
+          <Link href="/courses/inscription/add">
+            <button className={styles.addButton}>Agregar nuevo</button>
           </Link>
         </div>
       </div>
@@ -31,7 +27,6 @@ const UserPage = async ({ searchParams }) => {
             <td>Modulos</td>
             <td>Correo</td>
             <td>Fecha Inscripcion</td>
-            <td>Estado</td>
           </tr>
         </thead>
         <tbody>
@@ -40,15 +35,40 @@ const UserPage = async ({ searchParams }) => {
               <td>
                 <div className={styles.user}>{item.ci}</div>
               </td>
-              <td>{`${item.name} ${item.paterno} ${item.materno}`}</td>
-              <td>{item.course}</td>
-              <td>{item.modules}</td>
-              <td>{item.email}</td>
-              <td>{item.inscriptionDate}</td>
+              <td
+                className={styles.nameCap}
+              >{`${item.name} ${item.paterno} ${item.materno}`}</td>
               <td>
-                <button className={`${styles.button} ${styles.view}`}>
-                  Confirmar
-                </button>
+                {item.course.map((e, i) => (
+                  <div key={i} className={styles.course}>
+                    <p>{e.course}</p>
+                    <ul>
+                      {e.modules.map((mod, j) => (
+                        <li key={j}>{`${mod.name} Fecha: ${new Date(
+                          mod.date
+                        ).toLocaleDateString()} Horas: ${
+                          mod.academicHours
+                        }`}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </td>
+              <td>{item.email}</td>
+              <td>{item.createdAt.toLocaleDateString()}</td>
+              <td>
+                <div className={styles.buttons}>
+                  <Link href={`/courses/inscription/${item.id}`}>
+                    <button className={`${styles.button} ${styles.view}`}>
+                      Detalle
+                    </button>
+                  </Link>
+                  <Link href={`/courses/inscription`}>
+                    <button className={`${styles.button} ${styles.view}`}>
+                      Confirmar
+                    </button>
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}
@@ -59,4 +79,4 @@ const UserPage = async ({ searchParams }) => {
   );
 };
 
-export default UserPage;
+export default InscriptionPage;

@@ -19,7 +19,7 @@ const moduleSchema = new Schema({
   },
 });
 
-const cursoSchema = new Schema(
+export const cursoSchema = new Schema(
   {
     course: {
       type: String,

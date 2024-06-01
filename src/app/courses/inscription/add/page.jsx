@@ -1,9 +1,9 @@
-import FormCurso from "@/ui/courses/curso/formCurso/formCurso";
+import FormInscription from "@/ui/courses/inscription/formInscription/formInscription";
 
 const AddUserPage = () => {
   return (
     <div>
-      <FormCurso />
+      <FormInscription />
     </div>
   );
 };
