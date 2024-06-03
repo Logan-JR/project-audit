@@ -6,9 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 
 const FormCurso = () => {
   const [newCurso, setNewCurso] = useState("");
-  const [modules, setModules] = useState([
-    { name: "", date: "", academicHours: "" },
-  ]);
+  const [modules, setModules] = useState([]);
   const route = useRouter();
   const params = useParams();
 

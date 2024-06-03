@@ -4,7 +4,6 @@ import Kardex from "@/models/academic/Kardex";
 import Bitacora from "@/models/cpa/Bitacora";
 import Curso from "@/models/courses/Curso";
 import Inscription from "@/models/courses/Inscription";
-import { sheets } from "@/libs/sheets";
 
 export const loadUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
