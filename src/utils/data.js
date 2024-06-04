@@ -26,7 +26,7 @@ export const menuAdmin = [
       },
       {
         title: "Publicaciones",
-        path: "",
+        path: "/cpa/post",
         icon: <MdShoppingBag />,
       },
       {

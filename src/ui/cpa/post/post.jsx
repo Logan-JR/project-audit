@@ -2,54 +2,51 @@ import Image from "next/image";
 import Link from "next/link";
 import Search from "@/ui/dashboard/search/search";
 import Pagination from "@/ui/dashboard/pagination/pagination";
-import styles from "@/ui/academic/kardex/kardex.module.css";
-import { loadKardexs } from "@/libs/data";
+import styles from "@/ui/cpa/post/post.module.css";
+import { loadPost } from "@/libs/data";
 
-const KardexPage = async ({ searchParams }) => {
+const UserPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
-  const { count, kardexs } = await loadKardexs(q, page);
+  const { count, post } = await loadPost(q, page);
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Buscar..." />
-        <Link href="/academic/students/add">
+        <Link href="/cpa/post/add">
           <button className={styles.addButton}>Agregar nuevo</button>
         </Link>
       </div>
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>RU</td>
-            <td>CI</td>
-            <td>Estudiante</td>
-            <td>Creado en</td>
-            <td>Actualizado en</td>
-            <td>Acciones</td>
+            <td>Titulo</td>
+            <td>Detalle</td>
+            <td>Imagen</td>
+            <td>Archivo</td>
           </tr>
         </thead>
         <tbody>
-          {kardexs.map((k) => (
-            <tr key={k._id}>
+          {post.map((posts) => (
+            <tr key={posts._id}>
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={k.img || "/noavatar.png"}
+                    src={"/noavatar.png"}
                     alt=""
                     width={40}
                     height={40}
                     className={styles.userImage}
                   />
-                  {k.ru}
+                  {posts.title}
                 </div>
               </td>
-              <td>{k.ci}</td>
-              <td>{`${k.nombre} ${k.apellidoPaterno} ${k.apellidoMaterno}`}</td>
-              <td>{k.createdAt.toLocaleDateString()}</td>
-              <td>{k.updatedAt.toLocaleDateString()}</td>
+              <td>{posts.detail}</td>
+              <td>{posts.img}</td>
+              <td>{posts.file}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/academic/students/${k.id}`}>
+                  <Link href={`/cpa/post/${posts._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver
                     </button>
@@ -65,4 +62,4 @@ const KardexPage = async ({ searchParams }) => {
   );
 };
 
-export default KardexPage;
+export default UserPage;

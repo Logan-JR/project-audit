@@ -30,12 +30,10 @@ const userSchema = new Schema(
     role: {
       type: String,
       required: true,
-      default: "admin",
     },
     status: {
       type: String,
       required: true,
-      default: "active",
     },
     img: {
       type: String,

@@ -15,7 +15,7 @@ const FormInscription = () => {
   } = useForm();
 
   const fetchData = async () => {
-    const res = await fetch("http://localhost:3000/api/courses/curso");
+    const res = await fetch("/api/courses/curso");
     const data = await res.json();
     setData(data);
   };

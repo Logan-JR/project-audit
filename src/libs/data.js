@@ -4,6 +4,7 @@ import Kardex from "@/models/academic/Kardex";
 import Bitacora from "@/models/cpa/Bitacora";
 import Curso from "@/models/courses/Curso";
 import Inscription from "@/models/courses/Inscription";
+import Post from "@/models/cpa/Post";
 
 export const loadUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
@@ -87,6 +88,25 @@ export const loadInscription = async (q, page) => {
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
     return { count, inscription };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const loadPost = async (q, page) => {
+  const regex = new RegExp(q, "i");
+  const ITEM_PER_PAGE = 10;
+  try {
+    connectDB();
+    const count = await Post.find({
+      title: { $regex: regex },
+    }).count();
+    const post = await Post.find({
+      title: { $regex: regex },
+    })
+      .limit(ITEM_PER_PAGE)
+      .skip(ITEM_PER_PAGE * (page - 1));
+    return { count, post };
   } catch (error) {
     console.log(error);
   }
