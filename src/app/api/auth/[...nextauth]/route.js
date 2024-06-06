@@ -24,6 +24,7 @@ const handler = NextAuth({
         await connectDB();
         const userFound = await User.findOne({ email: credentials?.email });
         if (!userFound) throw new Error("Credenciales no validas");
+        if (userFound.status === "inactive") throw new Error("La cuenta de usuario expiro");
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           userFound.password

@@ -11,7 +11,7 @@
   padding: 50px;
   border-radius: 10px;
   width: 500px;
-  height: 500px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,12 +20,13 @@
 }
 
 .form p {
-  font-size: 2em;
-  font-weight: 600;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .form input {
   width: 100%;
+  font-size: 1.1rem;
   padding: 30px;
   border: 2px solid #2e374a;
   border-radius: 5px;
@@ -34,8 +35,10 @@
 }
 
 .form button {
-  width: 100%;
-  padding: 30px;
+  align-self: flex-end;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 10px 20px;
   background-color: teal;
   color: var(--text);
   border: none;
@@ -43,8 +46,18 @@
   border-radius: 5px;
 }
 
-.error {
-  padding: 10px 8px;
+.form button:hover {
+  background-color: rgb(0, 100, 100);
+}
+
+.form span {
+  color: white;
+  background-color: crimson;
+  text-align: center;
   border-radius: 5px;
-  background-color: rgb(235, 53, 89);
+  padding: 5px 10px;
+}
+
+.error {
+  align-self: flex-start;
 }
