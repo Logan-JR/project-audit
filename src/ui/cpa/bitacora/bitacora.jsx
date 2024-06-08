@@ -42,7 +42,7 @@ const BitacoraPage = async ({ searchParams }) => {
               </td>
               <td>{user.modifiedByUser.role}</td>
               <td>{user.operationType}</td>
-              <td>{user.log.wallTime.toDateString()}</td>
+              <td>{user.log.wallTime.toLocaleDateString()}</td>
               <td>{user.log.wallTime.toLocaleTimeString()}</td>
               <td>
                 <div className={styles.buttons}>

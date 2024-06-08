@@ -5,6 +5,7 @@ import styles from "@/ui/cpa/users/formUser/formUser.module.css";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 const FormUser = () => {
   const { data: session } = useSession();
@@ -264,18 +265,23 @@ const FormUser = () => {
             <option value="inactive">Inactive</option>
           </select>
           {errors.status && <span>{errors.status.message}</span>}
-          <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
-          {!params.id ? (
-            ""
-          ) : (
-            <button
-              className={styles.delete}
-              type="button"
-              onClick={handleDelete}
-            >
-              Borrar
-            </button>
-          )}
+          <div>
+            <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
+            {!params.id ? (
+              ""
+            ) : (
+              <button
+                className={styles.delete}
+                type="button"
+                onClick={handleDelete}
+              >
+                Borrar
+              </button>
+            )}
+            <Link href={"/cpa/users"}>
+              <button>Cancelar</button>
+            </Link>
+          </div>
         </form>
       </div>
     </div>

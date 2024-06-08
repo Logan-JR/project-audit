@@ -36,7 +36,6 @@
 }
 
 .form input,
-.form textarea,
 .form select {
   padding: 20px;
   border: 2px solid #2e374a;
@@ -51,8 +50,7 @@
 }
 
 .form button {
-  width: 100px;
-  padding: 15px;
+  padding: 15px 10px;
   background-color: teal;
   color: var(--text);
   border: none;
@@ -61,10 +59,40 @@
   margin-top: 20px;
 }
 
+.form span {
+  color: white;
+  background-color: crimson;
+  font-size: 0.9rem;
+  text-align: center;
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+.curso {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.send button {
+  width: 100px;
+  margin: 10px;
+}
+
+.fields {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .form button:hover {
-  background-color: darkgreen;
+  background-color: rgb(28, 151, 110);
 }
 
 .delete {
   background-color: crimson !important;
+}
+
+.delete:hover {
+  background-color: rgb(158, 31, 57) !important;
 }

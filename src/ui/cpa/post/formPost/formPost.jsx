@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "@/ui/cpa/post/formPost/formPost.module.css";
 import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 const FormPost = () => {
   const {
@@ -173,18 +174,23 @@ const FormPost = () => {
             })}
           />
           {errors.file && <span>{errors.file.message}</span>}
-          <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
-          {!params.id ? (
-            ""
-          ) : (
-            <button
-              className={styles.delete}
-              type="button"
-              onClick={handleDelete}
-            >
-              Borrar
-            </button>
-          )}
+          <div>
+            <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
+            {!params.id ? (
+              ""
+            ) : (
+              <button
+                className={styles.delete}
+                type="button"
+                onClick={handleDelete}
+              >
+                Borrar
+              </button>
+            )}
+            <Link href={"/cpa/post"}>
+              <button>Cancelar</button>
+            </Link>
+          </div>
         </form>
       </div>
     </div>

@@ -1,42 +1,46 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
+import { useForm, useFieldArray } from "react-hook-form";
 
 const FormCurso = () => {
-  const [newCurso, setNewCurso] = useState("");
-  const [modules, setModules] = useState([]);
   const route = useRouter();
   const params = useParams();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleAddModule = () => {
-    setModules([...modules, { name: "", date: "", academicHours: "" }]);
-  };
-
-  const handleRemoveModule = (index) => {
-    const newModules = modules.filter((_, i) => i !== index);
-    setModules(newModules);
-  };
-
-  const handleModuleChange = (index, e) => {
-    const newModules = [...modules];
-    newModules[index][e.target.name] = e.target.value;
-    setModules(newModules);
-  };
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "modules",
+  });
+  const handleAddModule = () =>
+    append({ name: "", date: "", academicHours: "" });
 
   const getCurso = async () => {
     const res = await fetch(`/api/courses/curso/${params.id}`);
     const data = await res.json();
-    setNewCurso(data.course);
-    setModules(data.modules);
+    reset({
+      course: data.course,
+      modules: data.modules.map((mod) => ({
+        name: mod.name,
+        date: mod.date,
+        academicHours: mod.academicHours,
+      })),
+    });
   };
 
-  const createCurso = async () => {
+  const createCurso = async (curso) => {
     try {
       const res = await fetch("/api/courses/curso", {
         method: "POST",
-        body: JSON.stringify({ course: newCurso, modules }),
+        body: JSON.stringify(curso),
         headers: {
           "Content-Type": "application/json",
         },
@@ -51,16 +55,16 @@ const FormCurso = () => {
     }
   };
 
-  const updateCurso = async () => {
+  const updateCurso = async (curso) => {
     try {
       const res = await fetch(`/api/courses/curso/${params.id}`, {
         method: "PUT",
-        body: JSON.stringify({ course: newCurso, modules }),
+        body: JSON.stringify(curso),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = res.json();
+      const data = await res.json();
       route.push("/courses/curso");
       route.refresh();
     } catch (error) {
@@ -82,12 +86,12 @@ const FormCurso = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!params.id) await createCurso();
+  const onSubmit = handleSubmit(async (data) => {
+    if (!params.id) await createCurso(data);
     else {
-      updateCurso();
+      updateCurso(data);
     }
-  };
+  });
 
   useEffect(() => {
     if (params.id) getCurso();
@@ -102,67 +106,94 @@ const FormCurso = () => {
         </div>
       </div>
       <div className={styles.formContainer}>
-        <form action={handleSubmit} className={styles.form}>
-          <div>
-            <label>Curso</label>
-            <input
-              type="text"
-              value={newCurso}
-              onChange={(e) => setNewCurso(e.target.value)}
-              required
-            />
+        <form onSubmit={onSubmit} className={styles.form}>
+          <div className={styles.curso}>
+            <div className={styles.form}>
+              <label>Curso</label>
+              <input
+                type="text"
+                {...register("course", {
+                  required: {
+                    value: true,
+                    message: "El nombre es requerido",
+                  },
+                })}
+              />
+              {errors.course && <span>{errors.course.message}</span>}
+            </div>
+            <button type="button" onClick={handleAddModule}>
+              Nuevo Modulo
+            </button>
           </div>
-
-          {modules.map((module, index) => (
-            <div key={index}>
-              <label>Modulo</label>
-              <input
-                type="text"
-                name="name"
-                value={module.name}
-                onChange={(e) => handleModuleChange(index, e)}
-                required
-              />
-
-              <label>Fecha</label>
-              <input
-                type="text"
-                name="date"
-                placeholder="Ej. yyyy-mm-dd"
-                onChange={(e) => handleModuleChange(index, e)}
-                required
-              />
-
-              <label>Horas</label>
-              <input
-                type="number"
-                name="academicHours"
-                value={module.academicHours}
-                onChange={(e) => handleModuleChange(index, e)}
-                required
-              />
-
-              <button type="button" onClick={() => handleRemoveModule(index)}>
-                Eliminar Modulo
-              </button>
+          {fields.map((field, index) => (
+            <div key={field.id} className={styles.fields}>
+              <div className={styles.form}>
+                <label>Modulo</label>
+                <input
+                  type="text"
+                  {...register(`modules.${index}.name`, {
+                    required: {
+                      value: true,
+                      message: "El nombre es requerido",
+                    },
+                  })}
+                />
+                {errors.modules?.[index]?.name && (
+                  <span>{errors.modules[index].name.message}</span>
+                )}
+              </div>
+              <div className={styles.form}>
+                <label>Fecha</label>
+                <input
+                  type="text"
+                  placeholder="Ej. yyyy-mm-dd"
+                  {...register(`modules.${index}.date`, {
+                    required: {
+                      value: true,
+                      message: "Ingrese una fecha",
+                    },
+                  })}
+                />
+                {errors.modules?.[index]?.date && (
+                  <span>{errors.modules[index].date.message}</span>
+                )}
+              </div>
+              <div className={styles.form}>
+                <label>Horas</label>
+                <input
+                  type="number"
+                  {...register(`modules.${index}.academicHours`, {
+                    required: {
+                      value: true,
+                      message: "Ingrese las horas academicas",
+                    },
+                  })}
+                />
+                {errors.modules?.[index]?.academicHours && (
+                  <span>{errors.modules[index].academicHours.message}</span>
+                )}
+              </div>
+              <div>
+                <button type="button" onClick={() => remove(index)}>
+                  Eliminar Modulo
+                </button>
+              </div>
             </div>
           ))}
-
-          <button type="button" onClick={handleAddModule}>
-            Nuevo Modulo
-          </button>
-          <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
-          {!params.id ? (
-            ""
-          ) : (
-            <button
-              className={styles.delete}
-              type="button"
-              onClick={handleDelete}
-            >
-              Borrar
-            </button>
-          )}
+          <div className={styles.send}>
+            <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
+            {!params.id ? (
+              ""
+            ) : (
+              <button
+                className={styles.delete}
+                type="button"
+                onClick={handleDelete}
+              >
+                Borrar
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>

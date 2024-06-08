@@ -23,7 +23,7 @@ const Search = ({ placeholder }) => {
     <div className={styles.container}>
       <MdSearch />
       <input
-        type="text"
+        type="search"
         placeholder={placeholder}
         className={styles.input}
         onChange={handleSearch}
