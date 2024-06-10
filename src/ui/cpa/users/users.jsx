@@ -44,7 +44,7 @@ const UserPage = async ({ searchParams }) => {
                 </div>
               </td>
               <td>{user.email}</td>
-              <td>{user.createdAt.toDateString()}</td>
+              <td>{user.createdAt.toLocaleDateString()}</td>
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td>

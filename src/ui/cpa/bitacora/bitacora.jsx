@@ -46,7 +46,7 @@ const BitacoraPage = async ({ searchParams }) => {
               <td>{user.log.wallTime.toLocaleTimeString()}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={""}>
+                  <Link href={`/cpa/logs/${user._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver Log
                     </button>

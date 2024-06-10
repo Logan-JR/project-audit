@@ -3,9 +3,7 @@ import {
   MdSupervisedUserCircle,
   MdShoppingBag,
   MdAttachMoney,
-  MdWork,
   MdAnalytics,
-  MdPeople,
   MdOutlineSettings,
   MdHelpCenter,
 } from "react-icons/md";
@@ -30,29 +28,14 @@ export const menuAdmin = [
         icon: <MdShoppingBag />,
       },
       {
-        title: "Backup",
-        path: "",
-        icon: <MdAttachMoney />,
-      },
-    ],
-  },
-  {
-    title: "Analytics",
-    list: [
-      {
-        title: "Revenue",
-        path: "",
-        icon: <MdWork />,
-      },
-      {
         title: "Reports",
-        path: "",
+        path: "/cpa/logs",
         icon: <MdAnalytics />,
       },
       {
-        title: "Teams",
+        title: "Backup",
         path: "",
-        icon: <MdPeople />,
+        icon: <MdAttachMoney />,
       },
     ],
   },

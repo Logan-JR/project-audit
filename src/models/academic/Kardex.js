@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const datosSchema = new Schema({
+const personalSchema = new Schema({
   name: {
     type: String,
   },
@@ -10,7 +10,7 @@ const datosSchema = new Schema({
   materno: {
     type: String,
   },
-  direccion: {
+  address: {
     type: String,
   },
   celular: {
@@ -20,7 +20,7 @@ const datosSchema = new Schema({
 
 const studentSchema = new Schema({
   datos: {
-    type: datosSchema,
+    type: personalSchema,
   },
   ci: {
     type: String,
@@ -52,7 +52,7 @@ const studentSchema = new Schema({
   zona: {
     type: String,
   },
-  telefono: {
+  phone: {
     type: String,
   },
   NumDipBachiller: {
@@ -96,7 +96,7 @@ const kardexSchema = new Schema(
       type: studentSchema,
     },
     parents: {
-      type: datosSchema,
+      type: personalSchema,
     },
     education: {
       type: educationsSchema,
@@ -108,6 +108,9 @@ const kardexSchema = new Schema(
       type: String,
     },
     gestion: {
+      type: String,
+    },
+    kardex: {
       type: String,
     },
   },
