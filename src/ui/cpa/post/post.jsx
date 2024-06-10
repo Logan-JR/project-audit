@@ -20,10 +20,9 @@ const UserPage = async ({ searchParams }) => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>Titulo</td>
+            <td>Publicación</td>
             <td>Detalle</td>
-            <td>Imagen</td>
-            <td>Archivo</td>
+            <td>Fecha</td>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +31,7 @@ const UserPage = async ({ searchParams }) => {
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={"/noavatar.png"}
+                    src={`/image/${posts.img}`}
                     alt=""
                     width={40}
                     height={40}
@@ -42,10 +41,14 @@ const UserPage = async ({ searchParams }) => {
                 </div>
               </td>
               <td>{posts.detail}</td>
-              <td>{posts.img}</td>
-              <td>{posts.file}</td>
+              <td>{posts.createdAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>
+                  <Link href={`/pdf/${posts.file}`} target="_blank">
+                    <button className={`${styles.button} ${styles.view}`}>
+                      PDF
+                    </button>
+                  </Link>
                   <Link href={`/cpa/post/${posts._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver

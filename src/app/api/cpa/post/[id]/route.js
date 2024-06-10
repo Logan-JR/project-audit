@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/libs/database";
 import Post from "@/models/cpa/Post";
+import { createFile } from "@/utils/file";
 
 export const GET = async (request, { params }) => {
   try {
@@ -25,12 +26,22 @@ export const GET = async (request, { params }) => {
 
 export const PUT = async (request, { params }) => {
   try {
-    const data = await request.json();
-    const postUpdate = await Post.findByIdAndUpdate(params.id, data, {
+    const data = await request.formData();
+    const newData = Object.fromEntries(data.entries());
+    if (typeof data.get("img") !== "string") {
+      const nameImage = await createFile(data.get("img"));
+      newData.img = nameImage;
+    }
+    if (typeof data.get("file") !== "string") {
+      const nameFile = await createFile(data.get("file"), false);
+      newData.file = nameFile;
+    }
+    const postUpdate = await Post.findByIdAndUpdate(params.id, newData, {
       new: true,
     });
     return NextResponse.json(postUpdate);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error.message, {
       status: 400,
     });

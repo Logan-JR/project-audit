@@ -4,46 +4,41 @@ import styles from "@/ui/cpa/post/formPost/formPost.module.css";
 import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import Image from "next/image";
 
 const FormPost = () => {
+  const [image, setImage] = useState("/noavatar.png");
   const {
     register,
     handleSubmit,
-    setValue,
+    watch,
+    reset,
     formState: { errors },
   } = useForm();
-  const [newPost, setNewPost] = useState({
-    title: "",
-    detail: "",
-    img: "",
-    file: "",
-  });
   const route = useRouter();
   const params = useParams();
 
   const getPost = async () => {
     const res = await fetch(`/api/cpa/post/${params.id}`);
     const data = await res.json();
-    setNewPost({
+    setImage(`/image/${watch("img")}`);
+    reset({
       title: data.title,
       detail: data.detail,
       img: data.img,
       file: data.file,
     });
-    setValue("title", data.title);
-    setValue("detail", data.detail);
-    setValue("img", data.img);
-    setValue("file", data.file);
   };
-
-  const createUser = async () => {
+  const createUser = async (p) => {
     try {
+      const formData = new FormData();
+      formData.append("title", p.title);
+      formData.append("detail", p.detail);
+      formData.append("img", p.img[0]);
+      formData.append("file", p.file[0]);
       const res = await fetch("/api/cpa/post", {
         method: "POST",
-        body: JSON.stringify(newPost),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       const data = await res.json();
       if (res.status === 200) {
@@ -55,18 +50,22 @@ const FormPost = () => {
     }
   };
 
-  const updatePost = async () => {
+  const updatePost = async (p) => {
     try {
+      const formData = new FormData();
+      formData.append("title", p.title);
+      formData.append("detail", p.detail);
+      formData.append("img", typeof p.img !== "string" ? p.img[0] : p.img);
+      formData.append("file", typeof p.file !== "string" ? p.file[0] : p.file);
       const res = await fetch(`/api/cpa/post/${params.id}`, {
         method: "PUT",
-        body: JSON.stringify(newPost),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       const data = res.json();
-      route.push("/cpa/post");
-      route.refresh();
+      if (res.status === 200) {
+        route.push("/cpa/post");
+        route.refresh();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -75,13 +74,6 @@ const FormPost = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const resUp = await fetch(`/api/cpa/post/${params.id}`, {
-          method: "PUT",
-          body: JSON.stringify(newPost),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
         const res = await fetch(`/api/cpa/post/${params.id}`, {
           method: "DELETE",
         });
@@ -93,15 +85,23 @@ const FormPost = () => {
     }
   };
 
-  const onSubmit = async () => {
-    if (!params.id) await createUser();
+  const onSubmit = async (e) => {
+    if (!params.id) await createUser(e);
     else {
-      updatePost();
+      updatePost(e);
     }
   };
 
-  const handleChange = (e) => {
-    setNewPost({ ...newPost, [e.target.name]: e.target.value });
+  const handleError = () => {
+    setImage("/noavatar.png");
+  };
+
+  const handleImage = (e) => {
+    if (!params.id) {
+      if (e.target.files[0]) return setImage(URL.createObjectURL(e.target.files[0]));
+    }
+    if (watch("img")[0]) return setImage(URL.createObjectURL(watch("img")[0]));
+    return setImage("/noavatar.png");
   };
 
   useEffect(() => {
@@ -111,6 +111,17 @@ const FormPost = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.infoContainer}>
+        <div className={styles.imgContainer}>
+          <Image
+            src={image}
+            alt=""
+            width={300}
+            height={300}
+            onError={handleError}
+          />
+        </div>
+      </div>
       <div className={styles.formContainer}>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -120,7 +131,6 @@ const FormPost = () => {
           <label>Titulo</label>
           <input
             type="text"
-            value={newPost.name}
             {...register("title", {
               required: { value: true, message: "El titulo es requerido" },
               minLength: {
@@ -131,14 +141,12 @@ const FormPost = () => {
                 value: 40,
                 message: "El titulo es demasiado largo",
               },
-              onChange: handleChange,
             })}
           />
           {errors.title && <span>{errors.title.message}</span>}
           <label>Detalle</label>
           <input
             type="text"
-            value={newPost.detail}
             {...register("detail", {
               minLength: {
                 value: 3,
@@ -148,7 +156,6 @@ const FormPost = () => {
                 value: 40,
                 message: "El detalle es demasiado largo",
               },
-              onChange: handleChange,
             })}
           />
           {errors.detail && <span>{errors.detail.message}</span>}
@@ -157,22 +164,12 @@ const FormPost = () => {
             type="file"
             accept="image/*"
             {...register("img", {
-              required: {
-                value: true,
-                message: "La imagen es requerida",
-              },
-              onChange: handleChange,
+              onChange: handleImage,
             })}
           />
           {errors.img && <span>{errors.img.message}</span>}
           <label>Archivo</label>
-          <input
-            type="file"
-            accept=".pdf"
-            {...register("file", {
-              onChange: handleChange,
-            })}
-          />
+          <input type="file" accept=".pdf" {...register("file")} />
           {errors.file && <span>{errors.file.message}</span>}
           <div>
             <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>

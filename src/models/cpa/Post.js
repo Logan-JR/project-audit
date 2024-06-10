@@ -13,7 +13,6 @@ const postSchema = new Schema(
     },
     img: {
       type: String,
-      required: true,
     },
     file: {
       type: String,
