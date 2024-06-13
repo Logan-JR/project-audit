@@ -16,7 +16,7 @@ const Navbar = () => {
           <Link href="/login">Login</Link>
         </li>
       </ul>
-      <Image src="/uatf.png" alt="" width={100} height={120} />
+      <Image src="/audit-05.png" alt="" width={110} height={130} objectFit="cover" />
       <ul className={styles.list}>
         <li>
           <Link href="/cpa">Admin</Link>

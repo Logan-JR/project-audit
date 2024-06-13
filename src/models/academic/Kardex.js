@@ -1,92 +1,133 @@
 import { Schema, model, models } from "mongoose";
 
-const personalSchema = new Schema({
-  name: {
+const locationSchema = new Schema({
+  pais: {
     type: String,
+    trim: true,
+    required: true,
+  },
+  departamento: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  provincia: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  localidad: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+});
+
+const personalSchema = new Schema({
+  nombre: {
+    type: String,
+    trim: true,
+    required: true,
   },
   paterno: {
     type: String,
+    trim: true,
+    required: true,
   },
   materno: {
     type: String,
+    trim: true,
+    required: true,
   },
-  address: {
+  direccion: {
     type: String,
+    trim: true,
+    required: true,
   },
   celular: {
     type: String,
+    trim: true,
   },
 });
 
 const studentSchema = new Schema({
   datos: {
     type: personalSchema,
+    required: true,
   },
   ci: {
     type: String,
+    unique: true,
+    required: true,
   },
-  birthdate: {
-    type: String,
+  fechaNacimiento: {
+    type: Date,
+    required: true,
   },
-  gender: {
+  sexo: {
     type: String,
+    trim: true,
+    required: true,
   },
-  status: {
+  estadoCivil: {
     type: String,
+    trim: true,
+    required: true,
   },
-  pais: {
-    type: String,
-  },
-  departamento: {
-    type: String,
-  },
-  provincia: {
-    type: String,
-  },
-  localidad: {
-    type: String,
+  ubicacion: {
+    type: locationSchema,
+    required: true,
   },
   correo: {
     type: String,
+    trim: true,
   },
   zona: {
     type: String,
+    trim: true,
+    required: true,
   },
-  phone: {
+  telefono: {
     type: String,
+    trim: true,
   },
-  NumDipBachiller: {
+  numDipBachiller: {
     type: String,
+    trim: true,
+    unique: true,
+    required: true,
   },
 });
 
 const educationsSchema = new Schema({
   colegio: {
     type: String,
+    trim: true,
+    required: true,
   },
   turno: {
     type: String,
+    trim: true,
+    required: true,
   },
   tipo: {
     type: String,
+    trim: true,
+    required: true,
   },
   area: {
     type: String,
+    trim: true,
+    required: true,
   },
-  pais: {
-    type: String,
+  ubicacion: {
+    type: locationSchema,
+    required: true,
   },
-  departamento: {
+  añoEgreso: {
     type: String,
-  },
-  provincia: {
-    type: String,
-  },
-  localidad: {
-    type: String,
-  },
-  egreso: {
-    type: String,
+    trim: true,
+    required: true,
   },
 });
 
@@ -94,27 +135,39 @@ const kardexSchema = new Schema(
   {
     student: {
       type: studentSchema,
+      required: true,
     },
     parents: {
       type: personalSchema,
+      required: true,
     },
     education: {
       type: educationsSchema,
+      required: true,
     },
     carrera: {
       type: String,
+      trim: true,
+      required: true,
     },
     modIngreso: {
       type: String,
+      trim: true,
+      required: true,
     },
     gestion: {
       type: String,
+      trim: true,
+      required: true,
     },
-    kardex: {
+    fileKardex: {
       type: String,
+      required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default models.Kardex || model("Kardex", kardexSchema);

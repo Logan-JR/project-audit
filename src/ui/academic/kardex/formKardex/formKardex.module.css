@@ -36,9 +36,9 @@
 }
 
 .form input,
-.form textarea,
 .form select {
-  padding: 20px;
+  min-width: 250px;
+  padding: 18px;
   border: 2px solid #2e374a;
   border-radius: 5px;
   background-color: var(--bg);
@@ -47,20 +47,72 @@
 }
 
 .form label {
-  font-size: 12px;
+  margin-top: 5px;
+  font-size: 0.9em;
+  font-style: italic;
 }
 
 .form button {
-  width: 100%;
-  padding: 20px;
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 10px 15px;
   background-color: teal;
   color: var(--text);
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+  margin-left: 20px;
+}
+
+.form span {
+  text-align: center;
+  font-size: 0.9em;
+  padding: 3px 5px;
+  background-color: crimson;
+  color: white;
+  border-radius: 5px;
+}
+
+.form h3 {
+  margin: 10px 0;
+}
+
+.title {
+  padding-left: 25px;
+}
+
+.containerRow {
+  display: flex;
+  justify-content: space-around;
+}
+
+.containerRow input {
+  width: 400px;
+}
+
+.containerColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  display: flex;
+  justify-content: space-around;
+}
+
+.top input {
+  width: 250px;
 }
 
 .delete {
   background-color: crimson !important;
+}
+
+.delete:hover {
+  background-color: rgba(220, 20, 60, 0.5) !important;
+}
+
+.form button:hover {
+  background-color: rgba(0, 128, 128, 0.5);
 }

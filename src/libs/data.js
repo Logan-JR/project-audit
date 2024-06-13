@@ -26,8 +26,10 @@ export const loadKardexs = async (q, page) => {
   const ITEM_PER_PAGE = 10;
   try {
     connectDB();
-    const count = await Kardex.find({ ru: { $regex: regex } }).count();
-    const kardexs = await Kardex.find({ ru: { $regex: regex } })
+    const count = await Kardex.find({
+      "student.ci": { $regex: regex },
+    }).count();
+    const kardexs = await Kardex.find({ "student.ci": { $regex: regex } })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
     return { count, kardexs };

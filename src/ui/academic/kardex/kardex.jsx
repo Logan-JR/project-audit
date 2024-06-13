@@ -20,9 +20,8 @@ const KardexPage = async ({ searchParams }) => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>RU</td>
-            <td>CI</td>
             <td>Estudiante</td>
+            <td>CI</td>
             <td>Creado en</td>
             <td>Actualizado en</td>
             <td>Acciones</td>
@@ -34,22 +33,21 @@ const KardexPage = async ({ searchParams }) => {
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={k.img || "/noavatar.png"}
+                    src={k.img || "/audit-05.png"}
                     alt=""
                     width={40}
                     height={40}
                     className={styles.userImage}
                   />
-                  {k.ru}
+                  {`${k.student.datos.nombre} ${k.student.datos.paterno} ${k.student.datos.materno}`}
                 </div>
               </td>
-              <td>{k.ci}</td>
-              <td>{`${k.nombre} ${k.apellidoPaterno} ${k.apellidoMaterno}`}</td>
+              <td>{k.student.ci}</td>
               <td>{k.createdAt.toLocaleDateString()}</td>
               <td>{k.updatedAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/academic/students/${k.id}`}>
+                  <Link href={`/academic/students/${k._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver
                     </button>

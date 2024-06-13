@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/libs/database";
 import Kardex from "@/models/academic/Kardex";
+import { createFile } from "@/utils/file";
 
 export const GET = async (request, { params }) => {
   try {
@@ -25,8 +26,28 @@ export const GET = async (request, { params }) => {
 
 export const PUT = async (request, { params }) => {
   try {
-    const data = await request.json();
-    const kardexUpdate = await Kardex.findByIdAndUpdate(params.id, data, {
+    const data = await request.formData();
+    const parseFormData = (formData) => {
+      const object = {};
+      formData.forEach((value, key) => {
+        const keys = key.split("[").map((k) => k.replace("]", ""));
+        keys.reduce((acc, k, i) => {
+          if (i === keys.length - 1) {
+            acc[k] = value;
+          } else {
+            if (!acc[k]) acc[k] = {};
+          }
+          return acc[k];
+        }, object);
+      });
+      return object;
+    };
+
+    const parsedData = parseFormData(data);
+    if (typeof parsedData.fileKardex !== "string") {
+      parsedData.fileKardex = await createFile(parsedData.fileKardex[0], false);
+    }
+    const kardexUpdate = await Kardex.findByIdAndUpdate(params.id, parsedData, {
       new: true,
     });
     return NextResponse.json(kardexUpdate);
