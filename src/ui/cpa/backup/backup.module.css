@@ -1,0 +1,48 @@
+.container_btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px;
+  margin-right: 10px;
+  margin-top: 15px;
+  border-radius: 7px;
+  border-style: none;
+  background-color: teal;
+  color: white;
+}
+
+.message {
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}
+
+.backupError {
+  font-size: 1rem;
+  color: crimson;
+}
+
+.backup {
+  padding: 5px;
+  margin: 5px;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.list ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+  margin: 5px;
+  list-style-type: none;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: rgba(0, 128, 128, 0.5);
+}

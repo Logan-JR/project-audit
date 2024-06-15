@@ -34,7 +34,7 @@ export const menuAdmin = [
       },
       {
         title: "Backup",
-        path: "",
+        path: "/cpa/backup",
         icon: <MdAttachMoney />,
       },
     ],

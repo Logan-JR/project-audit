@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/libs/database";
 import Post from "@/models/cpa/Post";
 import { createFile } from "@/utils/file";
+import { parseFormData } from "@/utils/form";
 
 export const GET = async (request, { params }) => {
   try {
@@ -27,16 +28,22 @@ export const GET = async (request, { params }) => {
 export const PUT = async (request, { params }) => {
   try {
     const data = await request.formData();
-    const newData = Object.fromEntries(data.entries());
-    if (typeof data.get("img") !== "string") {
-      const nameImage = await createFile(data.get("img"));
-      newData.img = nameImage;
+    const parsedData = parseFormData(data);
+    if (
+      typeof parsedData.img[0] !== "string" &&
+      typeof parsedData.img[0] !== "undefined"
+    ) {
+      parsedData.img = await createFile(parsedData.img[0], "/image");
     }
-    if (typeof data.get("file") !== "string") {
-      const nameFile = await createFile(data.get("file"), false);
-      newData.file = nameFile;
+    if (
+      typeof parsedData.file[0] !== "string" &&
+      typeof parsedData.file[0] !== "undefined"
+    ) {
+      parsedData.file = await createFile(parsedData.file[0], "/pdf");
     }
-    const postUpdate = await Post.findByIdAndUpdate(params.id, newData, {
+    if (typeof parsedData.img[0] === "undefined") parsedData.img = "";
+    if (typeof parsedData.file[0] === "undefined") parsedData.file = "";
+    const postUpdate = await Post.findByIdAndUpdate(params.id, parsedData, {
       new: true,
     });
     return NextResponse.json(postUpdate);

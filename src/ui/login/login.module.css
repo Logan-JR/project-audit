@@ -58,6 +58,16 @@
   padding: 5px 10px;
 }
 
+.home {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--bgSoft);
+}
+
+.home:hover {
+  border: 1px solid white;
+}
+
 .error {
   align-self: flex-start;
 }

@@ -1,0 +1,10 @@
+.heroImage {
+  background-image: url("/assets/edificio-05.jpeg");
+  background-size: cover;
+  background-position: center;
+  height: 85vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

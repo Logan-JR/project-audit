@@ -1,9 +1,11 @@
 "use client";
 import { useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
+import { formatDate } from "@/utils/date";
 
 const FormCurso = () => {
   const route = useRouter();
@@ -30,7 +32,7 @@ const FormCurso = () => {
       course: data.course,
       modules: data.modules.map((mod) => ({
         name: mod.name,
-        date: mod.date,
+        date: formatDate(mod.date),
         academicHours: mod.academicHours,
       })),
     });
@@ -102,7 +104,7 @@ const FormCurso = () => {
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src={"/noavatar.png"} alt="" width={300} height={300} />
+          <Image src={"/audit-03.png"} alt="" width={300} height={300} />
         </div>
       </div>
       <div className={styles.formContainer}>
@@ -145,7 +147,7 @@ const FormCurso = () => {
               <div className={styles.form}>
                 <label>Fecha</label>
                 <input
-                  type="text"
+                  type="date"
                   placeholder="Ej. yyyy-mm-dd"
                   {...register(`modules.${index}.date`, {
                     required: {
@@ -173,6 +175,16 @@ const FormCurso = () => {
                   <span>{errors.modules[index].academicHours.message}</span>
                 )}
               </div>
+              <div className={styles.form}>
+                <label>Archivo</label>
+                <input
+                  type="file"
+                  {...register(`modules.${index}.fileCourse`)}
+                />
+                {errors.modules?.[index]?.fileCourse && (
+                  <span>{errors.modules[index].fileCourse.message}</span>
+                )}
+              </div>
               <div>
                 <button type="button" onClick={() => remove(index)}>
                   Eliminar Modulo
@@ -193,6 +205,9 @@ const FormCurso = () => {
                 Borrar
               </button>
             )}
+            <Link href={"/courses/curso"}>
+              <button>Cancelar</button>
+            </Link>
           </div>
         </form>
       </div>

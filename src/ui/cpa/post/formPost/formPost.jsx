@@ -29,13 +29,21 @@ const FormPost = () => {
       file: data.file,
     });
   };
-  const createUser = async (p) => {
+  const createPost = async (p) => {
     try {
       const formData = new FormData();
-      formData.append("title", p.title);
-      formData.append("detail", p.detail);
-      formData.append("img", p.img[0]);
-      formData.append("file", p.file[0]);
+      const appendFormData = (data, root = "") => {
+        for (let key in data) {
+          const value = data[key];
+          const formKey = root ? `${root}[${key}]` : key;
+          if (value && typeof value === "object" && !(value instanceof File)) {
+            appendFormData(value, formKey);
+          } else {
+            formData.append(formKey, value);
+          }
+        }
+      };
+      appendFormData(p);
       const res = await fetch("/api/cpa/post", {
         method: "POST",
         body: formData,
@@ -53,10 +61,18 @@ const FormPost = () => {
   const updatePost = async (p) => {
     try {
       const formData = new FormData();
-      formData.append("title", p.title);
-      formData.append("detail", p.detail);
-      formData.append("img", typeof p.img !== "string" ? p.img[0] : p.img);
-      formData.append("file", typeof p.file !== "string" ? p.file[0] : p.file);
+      const appendFormData = (data, root = "") => {
+        for (let key in data) {
+          const value = data[key];
+          const formKey = root ? `${root}[${key}]` : key;
+          if (value && typeof value === "object" && !(value instanceof File)) {
+            appendFormData(value, formKey);
+          } else {
+            formData.append(formKey, value);
+          }
+        }
+      };
+      appendFormData(p);
       const res = await fetch(`/api/cpa/post/${params.id}`, {
         method: "PUT",
         body: formData,
@@ -86,7 +102,7 @@ const FormPost = () => {
   };
 
   const onSubmit = async (e) => {
-    if (!params.id) await createUser(e);
+    if (!params.id) await createPost(e);
     else {
       updatePost(e);
     }
@@ -98,7 +114,8 @@ const FormPost = () => {
 
   const handleImage = (e) => {
     if (!params.id) {
-      if (e.target.files[0]) return setImage(URL.createObjectURL(e.target.files[0]));
+      if (e.target.files[0])
+        return setImage(URL.createObjectURL(e.target.files[0]));
     }
     if (watch("img")[0]) return setImage(URL.createObjectURL(watch("img")[0]));
     return setImage("/noavatar.png");
@@ -164,6 +181,10 @@ const FormPost = () => {
             type="file"
             accept="image/*"
             {...register("img", {
+              required: {
+                value: !params.id ? true : false,
+                message: "La imagen es requerida",
+              },
               onChange: handleImage,
             })}
           />

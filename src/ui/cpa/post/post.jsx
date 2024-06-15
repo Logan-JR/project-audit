@@ -45,7 +45,10 @@ const UserPage = async ({ searchParams }) => {
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/pdf/${posts.file}`} target="_blank">
-                    <button className={`${styles.button} ${styles.view}`}>
+                    <button
+                      className={`${styles.button} ${styles.view}
+                      ${posts.file === "" ? styles.pdfError : ""}`}
+                    >
                       PDF
                     </button>
                   </Link>

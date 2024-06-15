@@ -1,10 +1,12 @@
-import Navbar from '@/ui/homepage/navbar/Navbar'
+import Navbar from "@/ui/homepage/navbar/Navbar";
+import HeroImage from "@/ui/homepage/heroImage/HeroImage";
+import styles from '@/ui/homepage/heroImage/heroImage.module.css'
 
 export default function HomePage() {
   return (
     <div>
       <Navbar />
-      <h1>HomePage</h1>
+      <HeroImage />
     </div>
   );
 }

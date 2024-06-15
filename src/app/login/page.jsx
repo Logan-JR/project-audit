@@ -1,6 +1,7 @@
 "use client";
 import styles from "@/ui/login/login.module.css";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -54,7 +55,7 @@ const LoginPage = () => {
             },
             pattern: {
               value: /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$/,
-              message: "El correo no es valido"
+              message: "El correo no es valido",
             },
             onChange: handlerChange,
           })}
@@ -72,7 +73,7 @@ const LoginPage = () => {
             },
             minLength: {
               value: 8,
-              message: "Contraseña demasiada corta"
+              message: "Contraseña demasiada corta",
             },
             onChange: handlerChange,
           })}
@@ -81,6 +82,9 @@ const LoginPage = () => {
           <span className={styles.error}>{errors.password.message}</span>
         )}
         <button>Login</button>
+        <Link className={styles.home} href={"/"}>
+          Ir al inicio
+        </Link>
       </form>
     </div>
   );

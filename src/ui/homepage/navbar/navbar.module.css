@@ -1,10 +1,13 @@
 .container {
+  position: fixed;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 60px;
   background-color: brown;
-  margin: 30px 15px 0;
+  margin: 30px 0 0;
   border-radius: 15px;
 }
 
