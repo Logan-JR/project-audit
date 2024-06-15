@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/libs/database";
-import Bitacora from "@/models/cpa/Bitacora";
+import Log from "@/models/cpa/Log";
 
 export const GET = async (request, { params }) => {
   try {
     connectDB();
-    const logFound = await Bitacora.findById(params.id);
+    const logFound = await Log.findById(params.id);
     if (!logFound)
       return NextResponse.json(
         {

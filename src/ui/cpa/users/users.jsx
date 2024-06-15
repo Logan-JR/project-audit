@@ -22,9 +22,9 @@ const UserPage = async ({ searchParams }) => {
           <tr>
             <td>Nombre</td>
             <td>Correo</td>
-            <td>Creado en</td>
             <td>Rol</td>
             <td>Estado</td>
+            <td>Creado en</td>
             <td>Acciones</td>
           </tr>
         </thead>
@@ -44,9 +44,9 @@ const UserPage = async ({ searchParams }) => {
                 </div>
               </td>
               <td>{user.email}</td>
-              <td>{user.createdAt.toLocaleDateString()}</td>
               <td>{user.role}</td>
               <td>{user.status}</td>
+              <td>{user.createdAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/cpa/users/${user.id}`}>

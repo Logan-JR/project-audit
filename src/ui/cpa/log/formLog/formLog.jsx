@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import styles from "@/ui/cpa/bitacora/formBitacora/formBitacora.module.css";
+import styles from "@/ui/cpa/log/formLog/formLog.module.css";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
-const FormBitacora = () => {
+const FormLog = () => {
   const [log, setLog] = useState();
   const params = useParams();
 
@@ -25,6 +26,11 @@ const FormBitacora = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
+        <div className={styles.containerBtn}>
+          <Link href={"/cpa/logs"}>
+            <button className={styles.btn}>Atras</button>
+          </Link>
+        </div>
         <h3>Log</h3>
         <pre>{JSON.stringify(log, null, 2)}</pre>
       </div>
@@ -32,4 +38,4 @@ const FormBitacora = () => {
   );
 };
 
-export default FormBitacora;
+export default FormLog;

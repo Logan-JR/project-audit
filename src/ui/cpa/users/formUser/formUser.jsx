@@ -4,8 +4,8 @@ import Image from "next/image";
 import styles from "@/ui/cpa/users/formUser/formUser.module.css";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
 const getImage = () =>
   `https://rickandmortyapi.com/api/character/avatar/${
@@ -13,9 +13,9 @@ const getImage = () =>
   }.jpeg`;
 
 const FormUser = () => {
-  const { data: session } = useSession();
   const route = useRouter();
   const params = useParams();
+  const { data: session, status } = useSession();
   const {
     register,
     handleSubmit,
@@ -42,6 +42,30 @@ const FormUser = () => {
     });
   };
 
+  const logUser = async (type, date, object) => {
+    try {
+      if (status === "authenticated") {
+        const { img, fullname, role, status } = session.user;
+        const res = await fetch("/api/cpa/log", {
+          method: "POST",
+          body: JSON.stringify({
+            modifiedByUser: { img, name: fullname, role, status },
+            operationType: type,
+            where: "USERS",
+            modifiedDate: date,
+            modifiedObject: object,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createUser = async (user) => {
     try {
       const res = await fetch("/api/cpa/users", {
@@ -53,6 +77,7 @@ const FormUser = () => {
       });
       const data = await res.json();
       if (res.status === 200) {
+        await logUser("INSERT", data.createdAt, data);
         route.push("/cpa/users");
         route.refresh();
       }
@@ -70,8 +95,9 @@ const FormUser = () => {
           "Content-Type": "application/json",
         },
       });
-      const data = res.json();
+      const data = await res.json();
       if (res.ok) {
+        await logUser("UPDATE", data.updatedAt, data);
         route.push("/cpa/users");
         route.refresh();
       }
@@ -86,7 +112,9 @@ const FormUser = () => {
         const res = await fetch(`/api/cpa/users/${params.id}`, {
           method: "DELETE",
         });
+        const data = await res.json();
         if (res.ok) {
+          await logUser("DELETE", new Date(), data);
           route.push("/cpa/users");
           route.refresh();
         }

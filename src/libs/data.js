@@ -1,7 +1,7 @@
 import { connectDB } from "@/libs/database";
 import User from "@/models/cpa/User";
 import Kardex from "@/models/academic/Kardex";
-import Bitacora from "@/models/cpa/Bitacora";
+import Log from "@/models/cpa/Log";
 import Curso from "@/models/courses/Curso";
 import Inscription from "@/models/courses/Inscription";
 import Post from "@/models/cpa/Post";
@@ -38,20 +38,21 @@ export const loadKardexs = async (q, page) => {
   }
 };
 
-export const loadBitacora = async (q, page) => {
+export const loadLog = async (q, page) => {
   const regex = new RegExp(q, "i");
   const ITEM_PER_PAGE = 10;
   try {
     connectDB();
-    const count = await Bitacora.find({
-      "modifiedByUser.username": { $regex: regex },
+    const count = await Log.find({
+      "modifiedByUser.name": { $regex: regex },
     }).count();
-    const bitacora = await Bitacora.find({
-      "modifiedByUser.username": { $regex: regex },
+    const log = await Log.find({
+      "modifiedByUser.name": { $regex: regex },
     })
+      .sort({ modifiedDate: -1 })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
-    return { count, bitacora };
+    return { count, log };
   } catch (error) {
     console.log(error);
   }

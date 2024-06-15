@@ -1,9 +1,9 @@
-import Bitacora from "@/ui/cpa/bitacora/bitacora";
+import Log from "@/ui/cpa/log/log";
 
 const LogPage = ({ searchParams }) => {
   return (
     <div>
-      <Bitacora searchParams={searchParams} />
+      <Log searchParams={searchParams} />
     </div>
   );
 };
