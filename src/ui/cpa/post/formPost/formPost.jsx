@@ -5,9 +5,11 @@ import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const FormPost = () => {
   const [image, setImage] = useState("/noavatar.png");
+  const { data: session, status } = useSession();
   const {
     register,
     handleSubmit,
@@ -29,6 +31,31 @@ const FormPost = () => {
       file: data.file,
     });
   };
+
+  const logPost = async (type, date, object) => {
+    try {
+      if (status === "authenticated") {
+        const { img, fullname, role, status } = session.user;
+        const res = await fetch("/api/cpa/log", {
+          method: "POST",
+          body: JSON.stringify({
+            modifiedByUser: { img, name: fullname, role, status },
+            operationType: type,
+            where: "POST",
+            modifiedDate: date,
+            modifiedObject: object,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createPost = async (p) => {
     try {
       const formData = new FormData();
@@ -49,7 +76,8 @@ const FormPost = () => {
         body: formData,
       });
       const data = await res.json();
-      if (res.status === 200) {
+      if (res.ok) {
+        await logPost("INSERT", data.createdAt, data);
         route.push("/cpa/post");
         route.refresh();
       }
@@ -77,8 +105,9 @@ const FormPost = () => {
         method: "PUT",
         body: formData,
       });
-      const data = res.json();
-      if (res.status === 200) {
+      const data = await res.json();
+      if (res.ok) {
+        await logPost("UPDATE", data.updatedAt, data);
         route.push("/cpa/post");
         route.refresh();
       }
@@ -93,8 +122,12 @@ const FormPost = () => {
         const res = await fetch(`/api/cpa/post/${params.id}`, {
           method: "DELETE",
         });
-        route.push("/cpa/post");
-        route.refresh();
+        const data = await res.json();
+        if (res.ok) {
+          await logPost("DELETE", new Date(), data);
+          route.push("/cpa/post");
+          route.refresh();
+        }
       } catch (error) {
         console.log(error);
       }

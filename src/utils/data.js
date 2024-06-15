@@ -6,6 +6,8 @@ import {
   MdAnalytics,
   MdOutlineSettings,
   MdHelpCenter,
+  MdLibraryBooks,
+  MdStorage,
 } from "react-icons/md";
 
 export const menuAdmin = [
@@ -25,31 +27,31 @@ export const menuAdmin = [
       {
         title: "Publicaciones",
         path: "/cpa/post",
-        icon: <MdShoppingBag />,
+        icon: <MdLibraryBooks />,
       },
       {
-        title: "Reports",
+        title: "Reportes",
         path: "/cpa/logs",
         icon: <MdAnalytics />,
       },
       {
         title: "Backup",
         path: "/cpa/backup",
-        icon: <MdAttachMoney />,
+        icon: <MdStorage />,
       },
     ],
   },
   {
-    title: "User",
+    title: "More",
     list: [
       {
         title: "Settings",
-        path: "/dashboard/settings",
+        path: "",
         icon: <MdOutlineSettings />,
       },
       {
         title: "Help",
-        path: "/dashboard/help",
+        path: "",
         icon: <MdHelpCenter />,
       },
     ],
