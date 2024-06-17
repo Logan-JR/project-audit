@@ -4,30 +4,45 @@ import styles from "@/ui/homepage/navbar/navbar.module.css";
 
 const Navbar = () => {
   return (
-    <nav className={styles.container}>
-      <ul className={styles.list}>
-        <li>
-          <Link href={""}>Home</Link>
-        </li>
-        <li>
-          <Link href={""}>About</Link>
-        </li>
-        <li>
-          <Link href="">Login</Link>
-        </li>
-      </ul>
-      <Image src="/audit-05.png" alt="" width={110} height={130} unoptimized={true} quality={100} />
-      <ul className={styles.list}>
-        <li>
-          <Link href="">About</Link>
-        </li>
-        <li>
-          <Link href="">About</Link>
-        </li>
-        <li>
-          <Link href="/login">Iniciar Sesión</Link>
-        </li>
-      </ul>
+    <nav className={styles.navbar}>
+      <div className={styles.navSection}>
+        <ul className={styles.navList}>
+          <li className={styles.navItem}>
+            <Link href={""}>Biblioteca Virtual</Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href={""}>Campus Universitario</Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href={""}>Acerca de Nosotros</Link>
+          </li>
+        </ul>
+      </div>
+      <div className={styles.logoContainer}>
+        <Image
+          src="/audit-05.png"
+          alt=""
+          className={styles.logo}
+          width={120}
+          height={140}
+        />
+      </div>
+      <div className={styles.navSection}>
+        <ul className={styles.navList}>
+          <li className={styles.navItem}>
+            <Link href={"/"}>Inicio</Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href={""}>About</Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href={""}>Contacto</Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href={"/login"}>Iniciar Sesión</Link>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 };

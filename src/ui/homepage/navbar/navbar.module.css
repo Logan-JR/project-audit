@@ -1,29 +1,46 @@
-.container {
-  position: fixed;
-  top: 0;
-  width: 100%;
+.navbar {
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  background-color: rgba(165, 42, 42, 0.7);
+  padding: 0 2rem;
+  margin-top: 2.5rem;
+  border-radius: 15px;
   height: 60px;
-  background-color: brown;
-  margin: 30px 0 0;
-  border-radius: 15px;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
 }
 
-.list {
+.navSection {
+  flex: 1;
+}
+
+.navList {
   display: flex;
-  font-size: 1.1rem;
-  font-weight: 500;
-  list-style-type: none;
-  gap: 1.5em;
+  justify-content: center;
+  list-style: none;
+  width: 100%;
 }
 
-.list li {
+.navItem {
+  margin: 0 1rem;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background-color 0.5s ease, color 0.5s ease, font-weight 0.7s ease;
   border-radius: 15px;
-  padding: 10px;
 }
 
-.list li:hover {
-  background-color: #182237;
+.navItem:hover {
+  font-weight: 600;
+  background-color: rgb(24, 34, 55);
+  color: white;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
 }
