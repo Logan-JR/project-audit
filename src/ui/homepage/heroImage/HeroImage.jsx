@@ -16,43 +16,53 @@ const HeroImage = () => {
         <div className={styles.cardsContainer}>
           <div className={styles.card}>
             <Image
-              src="/audit-03.png"
+              src="/assets/icon-01.png"
               alt=""
               className={styles.logo}
               width={50}
               height={50}
             />
-            <p className={styles.cardText}>Descripción 1</p>
+            <p className={styles.cardText}>Re Acreditada</p>
           </div>
           <div className={styles.card}>
             <Image
-              src="/audit-03.png"
+              src="/assets/icon-02.png"
               alt=""
               className={styles.logo}
               width={50}
               height={50}
             />
-            <p className={styles.cardText}>Descripción 2</p>
+            <p className={styles.cardText}>Carrera Decana</p>
           </div>
           <div className={styles.card}>
             <Image
-              src="/audit-03.png"
+              src="/assets/icon-03.png"
               alt=""
               className={styles.logo}
               width={50}
               height={50}
             />
-            <p className={styles.cardText}>Descripción 3</p>
+            <p className={styles.cardText}>Biblioteca</p>
           </div>
           <div className={styles.card}>
             <Image
-              src="/audit-03.png"
+              src="/assets/icon-04.png"
               alt=""
               className={styles.logo}
               width={50}
               height={50}
             />
-            <p className={styles.cardText}>Descripción 3</p>
+            <p className={styles.cardText}>Guarderia</p>
+          </div>
+          <div className={styles.card}>
+            <Image
+              src="/assets/icon-05.png"
+              alt=""
+              className={styles.logo}
+              width={50}
+              height={50}
+            />
+            <p className={styles.cardText}>Complejo Deportivo</p>
           </div>
         </div>
       </div>
