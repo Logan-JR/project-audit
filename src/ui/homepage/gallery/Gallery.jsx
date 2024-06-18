@@ -12,20 +12,23 @@ const images = [
 
 const Gallery = () => {
   return (
-    <div className={styles.gallery}>
-      {images.map((image, index) => (
-        <div key={index} className={styles.galleryItem}>
-          <Image
-            src={image.src}
-            alt={image.alt}
-            className={styles.image}
-            width={100}
-            height={100}
-            unoptimized
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <h2 className={styles.galleryTitle}>Galería</h2>
+      <div className={styles.gallery}>
+        {images.map((image, index) => (
+          <div key={index} className={styles.galleryItem}>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              className={styles.image}
+              width={100}
+              height={100}
+              unoptimized
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
