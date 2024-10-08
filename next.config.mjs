@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "rickandmortyapi.com",
       },
+      {
+        protocol: "https",
+        hostname: "nyc3.digitaloceanspaces.com",
+      },
     ],
   },
 };

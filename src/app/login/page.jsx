@@ -3,12 +3,14 @@ import styles from "@/ui/login/login.module.css";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
   const [error, setError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const route = useRouter();
   const {
     register,
@@ -16,34 +18,43 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = handleSubmit(async (data) => {
+    setLoading(true);
     try {
       const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
+      setLoading(false);
       if (res?.error) setError(res.error);
-      if (res?.ok && status === "authenticated") {
-        const role = session.user.role;
-        const routePath =
-          role === "admin"
-            ? "/cpa"
-            : role === "secretario"
-            ? "/academic"
-            : "/courses";
-        return route.push(routePath);
-      }
+      if (res?.ok) setIsLoggingIn(true);
+
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   });
 
   const handlerChange = () => setError("");
 
+  useEffect(() => {
+    if (isLoggingIn && status === "authenticated") {
+      const role = session.user.role;
+      const routePath =
+        role === "admin"
+          ? "/cpa"
+          : role === "secretario"
+          ? "/academic"
+          : "/courses";
+      route.push(routePath);
+    }
+  }, [status, isLoggingIn, session, route]);
+
   return (
     <div className={styles.container}>
       <form onSubmit={onSubmit} className={styles.form} noValidate>
         {error && <span>{error}</span>}
+        {loading && <div>Cargando, por favor espere...</div>}
         <p>Inicio de Sesión</p>
         <input
           type="email"

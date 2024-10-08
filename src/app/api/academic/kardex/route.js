@@ -29,7 +29,7 @@ export const POST = async (request) => {
     };
 
     const parsedData = parseFormData(data);
-    parsedData.fileKardex = await createFile(parsedData.fileKardex[0], false);
+    parsedData.fileKardex = await createFile(parsedData.fileKardex[0], "pdf/kardex");
     const newKardex = new Kardex(parsedData);
     const saveKardex = await newKardex.save();
     return NextResponse.json(saveKardex);

@@ -14,10 +14,10 @@ export const POST = async (request) => {
   try {
     const data = await request.formData();
     const parsedData = parseFormData(data);
-    parsedData.img = await createFile(parsedData.img[0], "/image");
+    parsedData.img = await createFile(parsedData.img[0], "image");
     if (!parsedData.file[0]) parsedData.file = "";
     else {
-      parsedData.file = await createFile(parsedData.file[0], "/pdf");
+      parsedData.file = await createFile(parsedData.file[0], "pdf");
     }
     const newPost = new Post(parsedData);
     const savePost = await newPost.save();

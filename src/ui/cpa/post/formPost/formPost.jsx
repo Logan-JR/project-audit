@@ -23,7 +23,7 @@ const FormPost = () => {
   const getPost = async () => {
     const res = await fetch(`/api/cpa/post/${params.id}`);
     const data = await res.json();
-    setImage(`/image/${watch("img")}`);
+    setImage(data.img);
     reset({
       title: data.title,
       detail: data.detail,
@@ -215,7 +215,7 @@ const FormPost = () => {
             accept="image/*"
             {...register("img", {
               required: {
-                value: !params.id ? true : false,
+                value: image != '' ? true : false,
                 message: "La imagen es requerida",
               },
               onChange: handleImage,

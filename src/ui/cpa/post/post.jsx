@@ -31,7 +31,7 @@ const UserPage = async ({ searchParams }) => {
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={`/image/${posts.img}`}
+                    src={posts.img}
                     alt=""
                     width={40}
                     height={40}
@@ -44,10 +44,11 @@ const UserPage = async ({ searchParams }) => {
               <td>{posts.createdAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/pdf/${posts.file}`} target="_blank">
+                  <Link href={posts.file} target="_blank">
                     <button
                       className={`${styles.button} ${styles.view}
                       ${posts.file === "" ? styles.pdfError : ""}`}
+                      disabled = {`${posts.file === "" ? styles.pdfError : ""}`}
                     >
                       PDF
                     </button>

@@ -30,7 +30,14 @@ const handler = NextAuth({
           userFound.password
         );
         if (!passwordMatch) throw new Error("Credenciales no validas");
-        return userFound;
+        return {
+          username: userFound.username,
+          fullname: userFound.fullname,
+          email: userFound.email,
+          role: userFound.role,
+          status: userFound.status,
+          img: userFound.img,
+        };
       },
     }),
   ],
@@ -41,6 +48,7 @@ const handler = NextAuth({
     },
     session({ session, token }) {
       session.user = token.user;
+      // console.log(session)
       return session;
     },
   },

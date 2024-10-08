@@ -45,7 +45,7 @@ export const PUT = async (request, { params }) => {
 
     const parsedData = parseFormData(data);
     if (typeof parsedData.fileKardex !== "string") {
-      parsedData.fileKardex = await createFile(parsedData.fileKardex[0], false);
+      parsedData.fileKardex = await createFile(parsedData.fileKardex[0], 'pdf/kardex');
     }
     const kardexUpdate = await Kardex.findByIdAndUpdate(params.id, parsedData, {
       new: true,
