@@ -32,17 +32,14 @@ const personalSchema = new Schema({
   paterno: {
     type: String,
     trim: true,
-    required: true,
   },
   materno: {
     type: String,
     trim: true,
-    required: true,
   },
   direccion: {
     type: String,
     trim: true,
-    required: true,
   },
   celular: {
     type: String,
@@ -57,6 +54,7 @@ const studentSchema = new Schema({
   },
   ci: {
     type: String,
+    trim: true,
     unique: true,
     required: true,
   },

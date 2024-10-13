@@ -25,10 +25,9 @@ const LoginPage = () => {
         password: data.password,
         redirect: false,
       });
-      setLoading(false);
+
       if (res?.error) setError(res.error);
       if (res?.ok) setIsLoggingIn(true);
-
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -46,6 +45,7 @@ const LoginPage = () => {
           : role === "secretario"
           ? "/academic"
           : "/courses";
+      setLoading(false);
       route.push(routePath);
     }
   }, [status, isLoggingIn, session, route]);

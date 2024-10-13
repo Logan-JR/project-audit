@@ -47,6 +47,15 @@ const KardexPage = async ({ searchParams }) => {
               <td>{k.updatedAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>
+                  <Link href={k.fileKardex} target="_blank">
+                    <button
+                      className={`${styles.button} ${styles.view}
+                      ${k.fileKardex === "" ? styles.pdfError : ""}`}
+                      disabled={`${k.fileKardex === "" ? styles.pdfError : ""}`}
+                    >
+                      PDF
+                    </button>
+                  </Link>
                   <Link href={`/academic/students/${k._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Ver

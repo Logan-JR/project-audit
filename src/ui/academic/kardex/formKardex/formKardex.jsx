@@ -3,16 +3,18 @@ import styles from "@/ui/academic/kardex/formKardex/formKardex.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatDate } from "@/utils/date";
 
 const FormKardex = () => {
   const params = useParams();
   const route = useRouter();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     reset,
     formState: { errors },
   } = useForm();
@@ -94,6 +96,7 @@ const FormKardex = () => {
   };
 
   const createKardex = async (kardex) => {
+    setLoading(true);
     const formData = new FormData();
     const appendFormData = (data, root = "") => {
       for (let key in data) {
@@ -115,10 +118,12 @@ const FormKardex = () => {
       });
       const data = await res.json();
       if (res.status === 200) {
+        setLoading(false);
         route.push("/academic/students");
         route.refresh();
-      }
+      } else setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -154,7 +159,7 @@ const FormKardex = () => {
   };
 
   const deleteKardex = async () => {
-    if (window.confirm("Are you sure you want to delete this kardex?")) {
+    if (window.confirm("Estas seguro de querer borrar este kardex?")) {
       try {
         const res = await fetch(`/api/academic/kardex/${params.id}`, {
           method: "DELETE",
@@ -202,6 +207,10 @@ const FormKardex = () => {
                     value: 12,
                     message: "El CI es demasiado largo",
                   },
+                  pattern: {
+                    value: /^[a-zA-Z0-9]+$/,
+                    message: "Caracteres no validos",
+                  },
                 })}
               />
               {errors.student?.ci && <span>{errors.student?.ci.message}</span>}
@@ -212,6 +221,10 @@ const FormKardex = () => {
                 type="text"
                 {...register("gestion", {
                   required: { value: true, message: "La gestión es requerida" },
+                  pattern: {
+                    value: /^(0[1-2])\/(19[0-9]{2}|20[0-9]{2}|2100)$/,
+                    message: "Formato incorrecto. Debe ser 01/AAAA o 02/AAAA",
+                  },
                 })}
               />
               {errors.gestion && <span>{errors.gestion.message}</span>}
@@ -248,8 +261,10 @@ const FormKardex = () => {
                     },
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
-                      message: "El nombre ingresado no es valido",
+                      message: "Caracter no valido",
                     },
+                    validate: (value) =>
+                      value.trim() !== "" || "No se puede enviar un dato vacio",
                   })}
                 />
                 {errors.student?.datos?.nombre && (
@@ -261,17 +276,22 @@ const FormKardex = () => {
                 <input
                   {...register("student.datos.paterno", {
                     required: {
-                      value: true,
-                      message: "El apellido paterno es requerido",
+                      value: !watch("student.datos.materno"),
+                      message: "El apellido es requerido",
                     },
                     minLength: {
                       value: 3,
                       message: "El apellido es demasiado corto",
                     },
                     pattern: {
-                      value: /^[A-Za-z]+$/,
-                      message: "El apellido ingresado no es valido",
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Caracter no valido",
                     },
+                    validate: (value) =>
+                      value.trim() === "" &&
+                      watch("student.datos.materno").trim() === ""
+                        ? "Apellido paterno vacio"
+                        : true,
                   })}
                 />
                 {errors.student?.datos?.paterno && (
@@ -283,17 +303,22 @@ const FormKardex = () => {
                 <input
                   {...register("student.datos.materno", {
                     required: {
-                      value: true,
-                      message: "El apellido materno es requerido",
+                      value: !watch("student.datos.paterno"),
+                      message: "El apellido es requerido",
                     },
                     minLength: {
                       value: 3,
                       message: "El apellido es demasiado corto",
                     },
                     pattern: {
-                      value: /^[A-Za-z]+$/,
-                      message: "El apellido ingresado no es valido",
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Caracter no valido",
                     },
+                    validate: (value) =>
+                      value.trim() === "" &&
+                      watch("student.datos.paterno").trim() === ""
+                        ? "Apellido materno vacio"
+                        : true,
                   })}
                 />
                 {errors.student?.datos?.materno && (
@@ -311,8 +336,25 @@ const FormKardex = () => {
                       value: true,
                       message: "La fecha de nacimiento es requerida",
                     },
-                    validate: (f) =>
-                      new Date(f) < new Date() || "Fecha no valida",
+                    validate: (f) => {
+                      const fechaIngresada = new Date(f);
+                      const fechaActual = new Date();
+                      const fechaMinima = new Date(
+                        fechaActual.getFullYear() - 14,
+                        fechaActual.getMonth(),
+                        fechaActual.getDate()
+                      );
+
+                      if (fechaIngresada > fechaActual) {
+                        return "No se permiten fechas futuras";
+                      }
+
+                      if (fechaIngresada > fechaMinima) {
+                        return "La edad del estudiante es menor a 14 años";
+                      }
+
+                      return true;
+                    },
                   })}
                 />
                 {errors.student?.fechaNacimiento && (
@@ -323,7 +365,7 @@ const FormKardex = () => {
                 <label>Sexo</label>
                 <select
                   {...register("student.sexo", {
-                    required: { value: true, message: "Eliga una opción" },
+                    required: { value: true, message: "Elija una opción" },
                   })}
                 >
                   <option value="">Elegir</option>
@@ -336,18 +378,19 @@ const FormKardex = () => {
               </div>
               <div className={styles.containerColumn}>
                 <label>Estado Civil</label>
-                <input
+                <select
                   {...register("student.estadoCivil", {
                     required: {
                       value: true,
-                      message: "Estado civil es requerido",
-                    },
-                    pattern: {
-                      value: /^[A-Za-z\s]+$/,
-                      message: "Estado civil no valido",
+                      message: "Elija una opción",
                     },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="soltero">Soltero</option>
+                  <option value="casado">Casado</option>
+                  <option value="divorciado">Divorciado</option>
+                </select>
                 {errors.student?.estadoCivil && (
                   <span>{errors.student?.estadoCivil.message}</span>
                 )}
@@ -363,7 +406,7 @@ const FormKardex = () => {
                     required: { value: true, message: "Ingrese el pais" },
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
-                      message: "Valor no valido",
+                      message: "Caracter no valido",
                     },
                   })}
                 />
@@ -412,7 +455,16 @@ const FormKardex = () => {
               </div>
               <div className={styles.containerColumn}>
                 <label>Correo</label>
-                <input type="email" {...register("student.correo")} />
+                <input
+                  type="email"
+                  {...register("student.correo", {
+                    pattern: {
+                      value:
+                        /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$/,
+                      message: "El correo no es valido",
+                    },
+                  })}
+                />
                 {errors.student?.correo && (
                   <span>{errors.student?.correo.message}</span>
                 )}
@@ -427,6 +479,12 @@ const FormKardex = () => {
                       value: true,
                       message: "La dirección es requerida",
                     },
+                    pattern: {
+                      value: /^[A-Za-z0-9\s\/\.]+$/,
+                      message: "Caracter no valido",
+                    },
+                    validate: (value) =>
+                      value.trim() !== "" || "No se puede enviar un dato vacio",
                   })}
                 />
                 {errors.student?.datos?.direccion && (
@@ -442,8 +500,8 @@ const FormKardex = () => {
                       message: "El numero es demasiado corto",
                     },
                     pattern: {
-                      value: /^[0-9]+$/,
-                      message: "El numero de celular no es valido",
+                      value: /^[0-9-]+$/,
+                      message: "Caracteres no validos",
                     },
                   })}
                 />
@@ -456,6 +514,12 @@ const FormKardex = () => {
                 <input
                   {...register("student.zona", {
                     required: { value: true, message: "Ingrese la zona" },
+                    pattern: {
+                      value: /^[a-zA-Z0-9\s]+$/,
+                      message: "Caracteres no validos",
+                    },
+                    validate: (value) =>
+                      value.trim() !== "" || "No se puede enviar un dato vacio",
                   })}
                 />
                 {errors.student?.zona && (
@@ -464,7 +528,18 @@ const FormKardex = () => {
               </div>
               <div className={styles.containerColumn}>
                 <label>Teléfono</label>
-                <input {...register("student.telefono")} />
+                <input
+                  {...register("student.telefono", {
+                    minLength: {
+                      value: 7,
+                      message: "El numero es demasiado corto",
+                    },
+                    pattern: {
+                      value: /^[0-9-]+$/,
+                      message: "Caracteres no validos",
+                    },
+                  })}
+                />
                 {errors.student?.telefono && (
                   <span>{errors.student?.telefono.message}</span>
                 )}
@@ -476,6 +551,10 @@ const FormKardex = () => {
                     required: {
                       value: true,
                       message: "Ingrese el numero del diploma de bachiller",
+                    },
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Caracteres no validos",
                     },
                   })}
                 />
@@ -497,6 +576,16 @@ const FormKardex = () => {
                       value: true,
                       message: "El nombre es requerido",
                     },
+                    minLength: {
+                      value: 3,
+                      message: "El nombre es demasiado corto",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Caracter no valido",
+                    },
+                    validate: (value) =>
+                      value.trim() !== "" || "No se puede enviar un dato vacio",
                   })}
                 />
                 {errors.parents?.nombre && (
@@ -508,9 +597,22 @@ const FormKardex = () => {
                 <input
                   {...register("parents.paterno", {
                     required: {
-                      value: true,
-                      message: "El apellido paterno es requerido",
+                      value: !watch("parents.materno"),
+                      message: "El apellido es requerido",
                     },
+                    minLength: {
+                      value: 3,
+                      message: "El apellido es demasiado corto",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Caracter no valido",
+                    },
+                    validate: (value) =>
+                      value.trim() === "" &&
+                      watch("parents.materno").trim() === ""
+                        ? "Apellido paterno vacio"
+                        : true,
                   })}
                 />
                 {errors.parents?.paterno && (
@@ -522,9 +624,22 @@ const FormKardex = () => {
                 <input
                   {...register("parents.materno", {
                     required: {
-                      value: true,
-                      message: "El apellido materno es requerido",
+                      value: !watch("parents.paterno"),
+                      message: "El apellido es requerido",
                     },
+                    minLength: {
+                      value: 3,
+                      message: "El apellido es demasiado corto",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Caracter no valido",
+                    },
+                    validate: (value) =>
+                      value.trim() === "" &&
+                      watch("parents.paterno").trim() === ""
+                        ? "Apellido materno vacio"
+                        : true,
                   })}
                 />
                 {errors.parents?.materno && (
@@ -537,7 +652,10 @@ const FormKardex = () => {
                 <label>Dirección</label>
                 <input
                   {...register("parents.direccion", {
-                    required: { value: true, message: "Ingrese una dirección" },
+                    pattern: {
+                      value: /^[A-Za-z0-9\s\/\.]+$/,
+                      message: "Caracter no valido",
+                    },
                   })}
                 />
                 {errors.parents?.direccion && (
@@ -546,7 +664,18 @@ const FormKardex = () => {
               </div>
               <div className={styles.containerColumn}>
                 <label>Celular</label>
-                <input {...register("parents.celular")} />
+                <input
+                  {...register("parents.celular", {
+                    minLength: {
+                      value: 7,
+                      message: "El numero es demasiado corto",
+                    },
+                    pattern: {
+                      value: /^[0-9-]+$/,
+                      message: "Caracteres no validos",
+                    },
+                  })}
+                />
                 {errors.parents?.celular && (
                   <span>{errors.parents?.celular.message}</span>
                 )}
@@ -564,6 +693,8 @@ const FormKardex = () => {
                       value: true,
                       message: "El colegio es requerido",
                     },
+                    validate: (value) =>
+                      value.trim() !== "" || "No se puede enviar un dato vacio",
                   })}
                 />
                 {errors.education?.colegio && (
@@ -572,33 +703,47 @@ const FormKardex = () => {
               </div>
               <div className={styles.containerColumn}>
                 <label>Turno</label>
-                <input
+                <select
                   {...register("education.turno", {
                     required: { value: true, message: "El turno es requerido" },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="diurno">Diurno</option>
+                  <option value="tarde">Tarde</option>
+                  <option value="nocturno">Nocturno</option>
+                </select>
                 {errors.education?.turno && (
                   <span>{errors.education?.turno.message}</span>
                 )}
               </div>
               <div className={styles.containerColumn}>
                 <label>Tipo</label>
-                <input
+                <select
                   {...register("education.tipo", {
-                    required: { value: true, message: "El tipo es requerido" },
+                    required: { value: true, message: "Elegir tipo" },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="fiscal">Fiscal</option>
+                  <option value="privado">Privado</option>
+                  <option value="convenio">Convenio</option>
+                </select>
                 {errors.education?.tipo && (
                   <span>{errors.education?.tipo.message}</span>
                 )}
               </div>
               <div className={styles.containerColumn}>
                 <label>Área</label>
-                <input
+                <select
                   {...register("education.area", {
-                    required: { value: true, message: "Ingrese el area" },
+                    required: { value: true, message: "Elegir area" },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="urbana">Urbana</option>
+                  <option value="rural">Rural</option>
+                </select>
                 {errors.education?.area && (
                   <span>{errors.education?.area.message}</span>
                 )}
@@ -663,11 +808,15 @@ const FormKardex = () => {
               <div className={styles.containerColumn}>
                 <label>Año de Egreso</label>
                 <input
-                  type="number"
+                  type="text"
                   {...register("education.añoEgreso", {
                     required: {
                       value: true,
                       message: "El año de egreso es requerido",
+                    },
+                    pattern: {
+                      value: /^(19[0-9]{2}|20[0-9]{2}|2100)$/,
+                      message: "Formato de año AAAA",
                     },
                   })}
                 />
@@ -682,14 +831,19 @@ const FormKardex = () => {
               <h3>Carrera</h3>
               <div className={styles.containerColumn}>
                 <label>Carrera</label>
-                <input
+                <select
                   {...register("carrera", {
                     required: {
                       value: true,
-                      message: "La carrera es requerida",
+                      message: "Elegir carrera",
                     },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="auditoria contaduria-publica">
+                    Auditoria Contaduria-Publica
+                  </option>
+                </select>
                 {errors.carrera && <span>{errors.carrera.message}</span>}
               </div>
             </div>
@@ -697,14 +851,23 @@ const FormKardex = () => {
               <h3>Modalidad de Ingreso</h3>
               <div className={styles.containerColumn}>
                 <label>Modo de Ingreso</label>
-                <input
+                <select
                   {...register("modIngreso", {
                     required: {
                       value: true,
-                      message: "El modo de ingreso es requerido",
+                      message: "Elegir modalidad de ingreso",
                     },
                   })}
-                />
+                >
+                  <option value="">Elegir</option>
+                  <option value="psa">PSA</option>
+                  <option value="excelencia academica">
+                    Excelencia Academica
+                  </option>
+                  <option value="excelencia deportiva">
+                    Excelencia Deportiva
+                  </option>
+                </select>
                 {errors.modIngreso && <span>{errors.modIngreso.message}</span>}
               </div>
             </div>
@@ -728,6 +891,7 @@ const FormKardex = () => {
             </Link>
           </div>
         </form>
+        {loading && <div>Cargando, por favor espere...</div>}
       </div>
     </div>
   );
