@@ -38,22 +38,6 @@ const InscriptionPage = async ({ searchParams }) => {
               <td
                 className={styles.nameCap}
               >{`${item.name} ${item.paterno} ${item.materno}`}</td>
-              <td>
-                {item.course.map((e, i) => (
-                  <div key={i} className={styles.course}>
-                    <p>{e.course}</p>
-                    <ul>
-                      {e.modules.map((mod, j) => (
-                        <li key={j}>{`${mod.name} Fecha: ${new Date(
-                          mod.date
-                        ).toLocaleDateString()} Horas: ${
-                          mod.academicHours
-                        }`}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </td>
               <td>{item.email}</td>
               <td>{item.createdAt.toLocaleDateString()}</td>
               <td>

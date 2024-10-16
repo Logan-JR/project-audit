@@ -64,10 +64,10 @@ export const loadCurso = async (q, page) => {
   try {
     connectDB();
     const count = await Curso.find({
-      course: { $regex: regex },
+      title: { $regex: regex },
     }).count();
     const cursos = await Curso.find({
-      course: { $regex: regex },
+      title: { $regex: regex },
     })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));

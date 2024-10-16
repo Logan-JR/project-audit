@@ -1,35 +1,32 @@
 import { Schema, model, models } from "mongoose";
 
-const moduleSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: 3,
-    maxLength: 50,
-    trim: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  academicHours: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-});
-
 export const cursoSchema = new Schema(
   {
-    course: {
+    title: {
       type: String,
       required: true,
-      minLength: 3,
-      maxLength: 50,
       trim: true,
     },
-    modules: {
-      type: [moduleSchema],
+    detail: {
+      type: String,
+      trim: true,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    hour: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    academicHours: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    flyer: {
+      type: String,
       required: true,
     },
   },

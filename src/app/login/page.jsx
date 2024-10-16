@@ -28,6 +28,7 @@ const LoginPage = () => {
 
       if (res?.error) setError(res.error);
       if (res?.ok) setIsLoggingIn(true);
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -45,7 +46,6 @@ const LoginPage = () => {
           : role === "secretario"
           ? "/academic"
           : "/courses";
-      setLoading(false);
       route.push(routePath);
     }
   }, [status, isLoggingIn, session, route]);
@@ -80,7 +80,7 @@ const LoginPage = () => {
           {...register("password", {
             required: {
               value: true,
-              message: "El correo es requerido",
+              message: "Ingrese su contraseña",
             },
             minLength: {
               value: 8,

@@ -1,51 +1,55 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { formatDate } from "@/utils/date";
 
 const FormCurso = () => {
   const route = useRouter();
   const params = useParams();
+  const [img, setImg] = useState("/noavatar.png");
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors },
   } = useForm();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "modules",
-  });
-  const handleAddModule = () =>
-    append({ name: "", date: "", academicHours: "" });
-
   const getCurso = async () => {
     const res = await fetch(`/api/courses/curso/${params.id}`);
     const data = await res.json();
+    setImg(data.flyer);
     reset({
-      course: data.course,
-      modules: data.modules.map((mod) => ({
-        name: mod.name,
-        date: formatDate(mod.date),
-        academicHours: mod.academicHours,
-      })),
+      title: data.title,
+      detail: data.detail,
+      startDate: formatDate(data.startDate),
+      academicHours: data.academicHours,
+      hour: data.hour,
+      flyer: data.flyer,
     });
   };
 
   const createCurso = async (curso) => {
     try {
+      const formData = new FormData();
+      const appendFormData = (data, root = "") => {
+        for (let key in data) {
+          const value = data[key];
+          const formKey = root ? `${root}[${key}]` : key;
+          if (value && typeof value === "object" && !(value instanceof File)) {
+            appendFormData(value, formKey);
+          } else {
+            formData.append(formKey, value);
+          }
+        }
+      };
+      appendFormData(curso);
       const res = await fetch("/api/courses/curso", {
         method: "POST",
-        body: JSON.stringify(curso),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       const data = await res.json();
       if (res.status === 200) {
@@ -59,23 +63,35 @@ const FormCurso = () => {
 
   const updateCurso = async (curso) => {
     try {
+      const formData = new FormData();
+      const appendFormData = (data, root = "") => {
+        for (let key in data) {
+          const value = data[key];
+          const formKey = root ? `${root}[${key}]` : key;
+          if (value && typeof value === "object" && !(value instanceof File)) {
+            appendFormData(value, formKey);
+          } else {
+            formData.append(formKey, value);
+          }
+        }
+      };
+      appendFormData(curso);
       const res = await fetch(`/api/courses/curso/${params.id}`, {
         method: "PUT",
-        body: JSON.stringify(curso),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       });
       const data = await res.json();
-      route.push("/courses/curso");
-      route.refresh();
+      if (res.ok) {
+        route.push("/courses/curso");
+        route.refresh();
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this curso?")) {
+    if (window.confirm("Estas seguro de querer borrar este curso?")) {
       try {
         const res = await fetch(`/api/courses/curso/${params.id}`, {
           method: "DELETE",
@@ -86,6 +102,12 @@ const FormCurso = () => {
         console.log(error);
       }
     }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if(file === undefined) setImg('/noavatar.png')
+    if (file) setImg(URL.createObjectURL(file));
   };
 
   const onSubmit = handleSubmit(async (data) => {
@@ -104,94 +126,95 @@ const FormCurso = () => {
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src={"/audit-03.png"} alt="" width={300} height={300} />
+          <Image src={img} alt="" width={300} height={300} priority />
         </div>
       </div>
       <div className={styles.formContainer}>
         <form onSubmit={onSubmit} className={styles.form}>
-          <div className={styles.curso}>
+          <div>
             <div className={styles.form}>
               <label>Curso</label>
               <input
                 type="text"
-                {...register("course", {
+                {...register("title", {
                   required: {
                     value: true,
                     message: "El nombre es requerido",
                   },
                 })}
               />
-              {errors.course && <span>{errors.course.message}</span>}
+              {errors.title && <span>{errors.title.message}</span>}
             </div>
-            <button type="button" onClick={handleAddModule}>
-              Nuevo Modulo
-            </button>
+            <div className={styles.form}>
+              <label>Descripción</label>
+              <input
+                type="text"
+                {...register("detail", {
+                  required: {
+                    value: false,
+                    message: "El detail es requerido",
+                  },
+                })}
+              />
+              {errors.detail && <span>{errors.detail.message}</span>}
+            </div>
+            <div className={styles.form}>
+              <label>Fecha de Inicio</label>
+              <input
+                type="date"
+                {...register("startDate", {
+                  required: {
+                    value: true,
+                    message: "Ingrese una fecha",
+                  },
+                })}
+              />
+              {errors.startDate && <span>{errors.startDate.message}</span>}
+            </div>
+            <div className={styles.form}>
+              <label>Hora</label>
+              <input
+                type="text"
+                {...register("hour", {
+                  required: {
+                    value: true,
+                    message: "Ingrese la hora de inicio",
+                  },
+                })}
+              />
+              {errors.hour && <span>{errors.hour.message}</span>}
+            </div>
+            <div className={styles.form}>
+              <label>Horas Academicas</label>
+              <input
+                type="text"
+                {...register("academicHours", {
+                  required: {
+                    value: true,
+                    message: "Ingrese las horas academicas",
+                  },
+                })}
+              />
+              {errors.academicHours && (
+                <span>{errors.academicHours.message}</span>
+              )}
+            </div>
+            <div className={styles.form}>
+              <label>Afiche</label>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("flyer", {
+                  onChange: handleImageChange,
+                  validate: (value) =>
+                    typeof value === "string" ||
+                    typeof value?.[0] !== "undefined" ||
+                    "El afiche es requerido",
+                })}
+              />
+              {errors.flyer && <span>{errors.flyer.message}</span>}
+            </div>
           </div>
-          {fields.map((field, index) => (
-            <div key={field.id} className={styles.fields}>
-              <div className={styles.form}>
-                <label>Modulo</label>
-                <input
-                  type="text"
-                  {...register(`modules.${index}.name`, {
-                    required: {
-                      value: true,
-                      message: "El nombre es requerido",
-                    },
-                  })}
-                />
-                {errors.modules?.[index]?.name && (
-                  <span>{errors.modules[index].name.message}</span>
-                )}
-              </div>
-              <div className={styles.form}>
-                <label>Fecha</label>
-                <input
-                  type="date"
-                  placeholder="Ej. yyyy-mm-dd"
-                  {...register(`modules.${index}.date`, {
-                    required: {
-                      value: true,
-                      message: "Ingrese una fecha",
-                    },
-                  })}
-                />
-                {errors.modules?.[index]?.date && (
-                  <span>{errors.modules[index].date.message}</span>
-                )}
-              </div>
-              <div className={styles.form}>
-                <label>Horas</label>
-                <input
-                  type="number"
-                  {...register(`modules.${index}.academicHours`, {
-                    required: {
-                      value: true,
-                      message: "Ingrese las horas academicas",
-                    },
-                  })}
-                />
-                {errors.modules?.[index]?.academicHours && (
-                  <span>{errors.modules[index].academicHours.message}</span>
-                )}
-              </div>
-              <div className={styles.form}>
-                <label>Archivo</label>
-                <input
-                  type="file"
-                  {...register(`modules.${index}.fileCourse`)}
-                />
-                {errors.modules?.[index]?.fileCourse && (
-                  <span>{errors.modules[index].fileCourse.message}</span>
-                )}
-              </div>
-              <div>
-                <button type="button" onClick={() => remove(index)}>
-                  Eliminar Modulo
-                </button>
-              </div>
-            </div>
-          ))}
           <div className={styles.send}>
             <button type="submit">{!params.id ? "Crear" : "Actualizar"}</button>
             {!params.id ? (
