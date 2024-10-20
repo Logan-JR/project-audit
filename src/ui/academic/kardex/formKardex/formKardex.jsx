@@ -3,9 +3,10 @@ import styles from "@/ui/academic/kardex/formKardex/formKardex.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { formatDate } from "@/utils/date";
+import { bolivianDepartments, departmentData } from "@/utils/data";
 
 const FormKardex = () => {
   const params = useParams();
@@ -16,6 +17,7 @@ const FormKardex = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -90,6 +92,12 @@ const FormKardex = () => {
         gestion,
         fileKardex,
       });
+      if (data.student.ubicacion.pais === "bolivia")
+        setValue("procedencia2", "nacional");
+      else setValue("procedencia2", "extranjero");
+      if (data.education.ubicacion.pais === "bolivia")
+        setValue("procedencia", "nacional");
+      else setValue("procedencia", "extranjero");
     } catch (error) {
       console.error(error);
     }
@@ -175,9 +183,98 @@ const FormKardex = () => {
   };
 
   const onSubmit = handleSubmit((e) => {
-    if (!params.id) createKardex(e);
-    else updateKardex(e);
+    const { procedencia, ...filteredData } = e;
+    if (!params.id) createKardex(filteredData);
+    else updateKardex(filteredData);
   });
+
+  // Country
+  const procedencia = watch("procedencia");
+  const department = watch("education.ubicacion.departamento");
+  const province = watch("education.ubicacion.provincia");
+
+  const provinces = useMemo(() => {
+    if (department && departmentData[department.toLowerCase()]) {
+      return departmentData[department.toLowerCase()].provinces;
+    }
+    return [];
+  }, [department]);
+
+  const localities = useMemo(() => {
+    if (
+      department &&
+      province &&
+      departmentData[department.toLowerCase()]?.localities[
+        province.toLowerCase()
+      ]
+    ) {
+      return departmentData[department.toLowerCase()].localities[
+        province.toLowerCase()
+      ];
+    }
+    return [];
+  }, [department, province]);
+
+  const handleChangeCountry = (e) => {
+    setValue("procedencia", e.target.value);
+    setValue(
+      "education.ubicacion.pais",
+      e.target.value === "nacional" ? "bolivia" : ""
+    );
+    setValue("education.ubicacion.departamento", "");
+    setValue("education.ubicacion.provincia", "");
+    setValue("education.ubicacion.localidad", "");
+  };
+
+  const handleChangeDepartment = (e) => {
+    setValue("education.ubicacion.departamento", e.target.value);
+    setValue("education.ubicacion.provincia", "");
+    setValue("education.ubicacion.localidad", "");
+  };
+
+  // procedencia2
+  const procedencia2 = watch("procedencia2");
+  const department2 = watch("student.ubicacion.departamento");
+  const province2 = watch("student.ubicacion.provincia");
+
+  const provinces2 = useMemo(() => {
+    if (department2 && departmentData[department2.toLowerCase()]) {
+      return departmentData[department2.toLowerCase()].provinces;
+    }
+    return [];
+  }, [department2]);
+
+  const localities2 = useMemo(() => {
+    if (
+      department2 &&
+      province2 &&
+      departmentData[department2.toLowerCase()]?.localities[
+        province2.toLowerCase()
+      ]
+    ) {
+      return departmentData[department2.toLowerCase()].localities[
+        province2.toLowerCase()
+      ];
+    }
+    return [];
+  }, [department2, province2]);
+
+  const handleChangeCountry2 = (e) => {
+    setValue("procedencia2", e.target.value);
+    setValue(
+      "student.ubicacion.pais",
+      e.target.value === "nacional" ? "bolivia" : ""
+    );
+    setValue("student.ubicacion.departamento", "");
+    setValue("student.ubicacion.provincia", "");
+    setValue("student.ubicacion.localidad", "");
+  };
+
+  const handleChangeDepartment2 = (e) => {
+    setValue("student.ubicacion.departamento", e.target.value);
+    setValue("student.ubicacion.provincia", "");
+    setValue("student.ubicacion.localidad", "");
+  };
 
   useEffect(() => {
     if (params.id) getKardex();
@@ -400,60 +497,6 @@ const FormKardex = () => {
           <div className={styles.containerRow}>
             <div>
               <div className={styles.containerColumn}>
-                <label>País</label>
-                <input
-                  {...register("student.ubicacion.pais", {
-                    required: { value: true, message: "Ingrese el pais" },
-                    pattern: {
-                      value: /^[A-Za-z\s]+$/,
-                      message: "Caracter no valido",
-                    },
-                  })}
-                />
-                {errors.student?.ubicacion?.pais && (
-                  <span>{errors.student?.ubicacion?.pais.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Departamento</label>
-                <input
-                  {...register("student.ubicacion.departamento", {
-                    required: {
-                      value: true,
-                      message: "Ingrese el departamento",
-                    },
-                  })}
-                />
-                {errors.student?.ubicacion?.departamento && (
-                  <span>{errors.student?.ubicacion?.departamento.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Provincia</label>
-                <input
-                  {...register("student.ubicacion.provincia", {
-                    required: {
-                      value: true,
-                      message: "Ingrese la provincia",
-                    },
-                  })}
-                />
-                {errors.student?.ubicacion?.provincia && (
-                  <span>{errors.student?.ubicacion?.provincia.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Localidad</label>
-                <input
-                  {...register("student.ubicacion.localidad", {
-                    required: { value: true, message: "Ingrese la localidad" },
-                  })}
-                />
-                {errors.student?.ubicacion?.localidad && (
-                  <span>{errors.student?.ubicacion?.localidad.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
                 <label>Correo</label>
                 <input
                   type="email"
@@ -469,6 +512,204 @@ const FormKardex = () => {
                   <span>{errors.student?.correo.message}</span>
                 )}
               </div>
+              <div className={styles.containerColumn}>
+                <label>Procedencia</label>
+                <select
+                  {...register("procedencia2", {
+                    required: {
+                      value: true,
+                      message: "Seleccione una opción",
+                    },
+                  })}
+                  onChange={handleChangeCountry2}
+                >
+                  <option value="">Seleccionar procedencia</option>
+                  <option value="nacional">Nacional</option>
+                  <option value="extranjero">Extranjero</option>
+                </select>
+                {errors.procedencia2 && (
+                  <span>{errors.procedencia2.message}</span>
+                )}
+              </div>
+              {procedencia2 === "nacional" && (
+                <>
+                  <div className={styles.containerColumn}>
+                    <label>País</label>
+                    <input
+                      value="Bolivia"
+                      readOnly
+                      {...register("student.ubicacion.pais", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                    />
+                    {errors.student?.ubicacion?.pais && (
+                      <span>{errors.student?.ubicacion?.pais.message}</span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Departamento</label>
+                    <select
+                      {...register("student.ubicacion.departamento", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      onChange={handleChangeDepartment2}
+                    >
+                      <option value="">Seleccionar departamento</option>
+                      {bolivianDepartments.map((dept) => (
+                        <option key={dept} value={dept.toLowerCase()}>
+                          {dept}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.student?.ubicacion?.departamento && (
+                      <span>
+                        {errors.student?.ubicacion?.departamento.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Provincia</label>
+                    <select
+                      {...register("student.ubicacion.provincia", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      disabled={!department2}
+                    >
+                      <option value="">Seleccionar provincia</option>
+                      {provinces2.map((prov) => (
+                        <option key={prov} value={prov.toLowerCase()}>
+                          {prov}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.student?.ubicacion?.provincia && (
+                      <span>
+                        {errors.student?.ubicacion?.provincia.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Localidad</label>
+                    <select
+                      {...register("student.ubicacion.localidad", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      disabled={!province2}
+                    >
+                      <option value="">Seleccionar localidad</option>
+                      {localities2.map((loc) => (
+                        <option key={loc} value={loc.toLowerCase()}>
+                          {loc}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.student?.ubicacion?.localidad && (
+                      <span>
+                        {errors.student?.ubicacion?.localidad.message}
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+              {procedencia2 === "extranjero" && (
+                <>
+                  <div className={styles.containerColumn}>
+                    <label>País</label>
+                    <input
+                      {...register("student.ubicacion.pais", {
+                        required: { value: true, message: "Ingrese el pais" },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.student?.ubicacion?.pais && (
+                      <span>{errors.student?.ubicacion?.pais.message}</span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Departamento</label>
+                    <input
+                      {...register("student.ubicacion.departamento", {
+                        required: {
+                          value: true,
+                          message: "Ingrese el departamento",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.student?.ubicacion?.departamento && (
+                      <span>
+                        {errors.student?.ubicacion?.departamento.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Provincia</label>
+                    <input
+                      {...register("student.ubicacion.provincia", {
+                        required: {
+                          value: true,
+                          message: "Ingrese la provincia",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.student?.ubicacion?.provincia && (
+                      <span>
+                        {errors.student?.ubicacion?.provincia.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Localidad</label>
+                    <input
+                      {...register("student.ubicacion.localidad", {
+                        required: {
+                          value: true,
+                          message: "Ingrese la localidad",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.student?.ubicacion?.localidad && (
+                      <span>
+                        {errors.student?.ubicacion?.localidad.message}
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
             <div>
               <div className={styles.containerColumn}>
@@ -748,87 +989,27 @@ const FormKardex = () => {
                   <span>{errors.education?.area.message}</span>
                 )}
               </div>
-            </div>
-            <div>
               <div className={styles.containerColumn}>
-                <label>País</label>
-                <input
-                  {...register("education.ubicacion.pais", {
-                    required: { value: true, message: "El pais es requerido" },
-                  })}
-                />
-                {errors.education?.ubicacion?.pais && (
-                  <span>{errors.education?.ubicacion?.pais.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Departamento</label>
-                <input
-                  {...register("education.ubicacion.departamento", {
+                <label>Modalidad de Ingreso</label>
+                <select
+                  {...register("modIngreso", {
                     required: {
                       value: true,
-                      message: "El departamento es requerido",
+                      message: "Elegir modalidad de ingreso",
                     },
                   })}
-                />
-                {errors.education?.ubicacion?.departamento && (
-                  <span>
-                    {errors.education?.ubicacion?.departamento.message}
-                  </span>
-                )}
+                >
+                  <option value="">Elegir</option>
+                  <option value="psa">PSA</option>
+                  <option value="excelencia academica">
+                    Excelencia Academica
+                  </option>
+                  <option value="excelencia deportiva">
+                    Excelencia Deportiva
+                  </option>
+                </select>
+                {errors.modIngreso && <span>{errors.modIngreso.message}</span>}
               </div>
-              <div className={styles.containerColumn}>
-                <label>Provincia</label>
-                <input
-                  {...register("education.ubicacion.provincia", {
-                    required: {
-                      value: true,
-                      message: "La provincia en requerida",
-                    },
-                  })}
-                />
-                {errors.education?.ubicacion?.provincia && (
-                  <span>{errors.education?.ubicacion?.provincia.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Localidad</label>
-                <input
-                  {...register("education.ubicacion.localidad", {
-                    required: {
-                      value: true,
-                      message: "La localidad es requerida",
-                    },
-                  })}
-                />
-                {errors.education?.ubicacion?.localidad && (
-                  <span>{errors.education?.ubicacion?.localidad.message}</span>
-                )}
-              </div>
-              <div className={styles.containerColumn}>
-                <label>Año de Egreso</label>
-                <input
-                  type="text"
-                  {...register("education.añoEgreso", {
-                    required: {
-                      value: true,
-                      message: "El año de egreso es requerido",
-                    },
-                    pattern: {
-                      value: /^(19[0-9]{2}|20[0-9]{2}|2100)$/,
-                      message: "Formato de año AAAA",
-                    },
-                  })}
-                />
-                {errors.education?.añoEgreso && (
-                  <span>{errors.education?.añoEgreso.message}</span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className={styles.containerRow}>
-            <div>
-              <h3>Carrera</h3>
               <div className={styles.containerColumn}>
                 <label>Carrera</label>
                 <select
@@ -848,27 +1029,225 @@ const FormKardex = () => {
               </div>
             </div>
             <div>
-              <h3>Modalidad de Ingreso</h3>
               <div className={styles.containerColumn}>
-                <label>Modo de Ingreso</label>
+                <label>Procedencia</label>
                 <select
-                  {...register("modIngreso", {
+                  {...register("procedencia", {
                     required: {
                       value: true,
-                      message: "Elegir modalidad de ingreso",
+                      message: "Seleccione una opción",
                     },
                   })}
+                  onChange={handleChangeCountry}
                 >
-                  <option value="">Elegir</option>
-                  <option value="psa">PSA</option>
-                  <option value="excelencia academica">
-                    Excelencia Academica
-                  </option>
-                  <option value="excelencia deportiva">
-                    Excelencia Deportiva
-                  </option>
+                  <option value="">Seleccionar procedencia</option>
+                  <option value="nacional">Nacional</option>
+                  <option value="extranjero">Extranjero</option>
                 </select>
-                {errors.modIngreso && <span>{errors.modIngreso.message}</span>}
+                {errors.procedencia && (
+                  <span>{errors.procedencia.message}</span>
+                )}
+              </div>
+              {procedencia === "nacional" && (
+                <>
+                  <div className={styles.containerColumn}>
+                    <label>País</label>
+                    <input
+                      value="Bolivia"
+                      readOnly
+                      {...register("education.ubicacion.pais", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                    />
+                    {errors.education?.ubicacion?.pais && (
+                      <span>{errors.education?.ubicacion?.pais.message}</span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Departamento</label>
+                    <select
+                      {...register("education.ubicacion.departamento", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      onChange={handleChangeDepartment}
+                    >
+                      <option value="">Seleccionar departamento</option>
+                      {bolivianDepartments.map((dept) => (
+                        <option key={dept} value={dept.toLowerCase()}>
+                          {dept}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.education?.ubicacion?.departamento && (
+                      <span>
+                        {errors.education?.ubicacion?.departamento.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Provincia</label>
+                    <select
+                      {...register("education.ubicacion.provincia", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      disabled={!department}
+                    >
+                      <option value="">Seleccionar provincia</option>
+                      {provinces.map((prov) => (
+                        <option key={prov} value={prov.toLowerCase()}>
+                          {prov}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.education?.ubicacion?.provincia && (
+                      <span>
+                        {errors.education?.ubicacion?.provincia.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Localidad</label>
+                    <select
+                      {...register("education.ubicacion.localidad", {
+                        required: {
+                          value: true,
+                          message: "Seleccione una opción",
+                        },
+                      })}
+                      disabled={!province}
+                    >
+                      <option value="">Seleccionar localidad</option>
+                      {localities.map((loc) => (
+                        <option key={loc} value={loc.toLowerCase()}>
+                          {loc}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.education?.ubicacion?.localidad && (
+                      <span>
+                        {errors.education?.ubicacion?.localidad.message}
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+              {procedencia === "extranjero" && (
+                <>
+                  <div className={styles.containerColumn}>
+                    <label>País</label>
+                    <input
+                      {...register("education.ubicacion.pais", {
+                        required: {
+                          value: true,
+                          message: "El pais es requerido",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.education?.ubicacion?.pais && (
+                      <span>{errors.education?.ubicacion?.pais.message}</span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Departamento</label>
+                    <input
+                      {...register("education.ubicacion.departamento", {
+                        required: {
+                          value: true,
+                          message: "El departamento es requerido",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.education?.ubicacion?.departamento && (
+                      <span>
+                        {errors.education?.ubicacion?.departamento.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Provincia</label>
+                    <input
+                      {...register("education.ubicacion.provincia", {
+                        required: {
+                          value: true,
+                          message: "La provincia en requerida",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.education?.ubicacion?.provincia && (
+                      <span>
+                        {errors.education?.ubicacion?.provincia.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.containerColumn}>
+                    <label>Localidad</label>
+                    <input
+                      {...register("education.ubicacion.localidad", {
+                        required: {
+                          value: true,
+                          message: "La localidad es requerida",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z\s]+$/,
+                          message: "Caracter no valido",
+                        },
+                        validate: (value) =>
+                          value.trim() !== "" || "El campo esta vacio",
+                      })}
+                    />
+                    {errors.education?.ubicacion?.localidad && (
+                      <span>
+                        {errors.education?.ubicacion?.localidad.message}
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+              <div className={styles.containerColumn}>
+                <label>Año de Egreso</label>
+                <input
+                  type="text"
+                  {...register("education.añoEgreso", {
+                    required: {
+                      value: true,
+                      message: "El año de egreso es requerido",
+                    },
+                    pattern: {
+                      value: /^(19[0-9]{2}|20[0-9]{2}|2100)$/,
+                      message: "Formato de año AAAA",
+                    },
+                  })}
+                />
+                {errors.education?.añoEgreso && (
+                  <span>{errors.education?.añoEgreso.message}</span>
+                )}
               </div>
             </div>
           </div>
@@ -892,6 +1271,9 @@ const FormKardex = () => {
           </div>
         </form>
         {loading && <div>Cargando, por favor espere...</div>}
+        <div>
+          <pre>{JSON.stringify(watch(), null, 2)}</pre>
+        </div>
       </div>
     </div>
   );
