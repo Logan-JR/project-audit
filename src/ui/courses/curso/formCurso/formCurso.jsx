@@ -6,10 +6,12 @@ import styles from "@/ui/courses/curso/formCurso/formCurso.module.css";
 import { useRouter, useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { formatDate } from "@/utils/date";
+import { useSession } from "next-auth/react";
 
 const FormCurso = () => {
   const route = useRouter();
   const params = useParams();
+  const { data: session, status } = useSession();
   const [img, setImg] = useState("/noavatar.png");
   const {
     register,
@@ -30,6 +32,30 @@ const FormCurso = () => {
       hour: data.hour,
       flyer: data.flyer,
     });
+  };
+
+  const logCurso = async (type, date, object) => {
+    try {
+      if (status === "authenticated") {
+        const { img, fullname, role, status } = session.user;
+        const res = await fetch("/api/cpa/log", {
+          method: "POST",
+          body: JSON.stringify({
+            modifiedByUser: { img, name: fullname, role, status },
+            operationType: type,
+            where: "COURSE",
+            modifiedDate: date,
+            modifiedObject: object,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const createCurso = async (curso) => {
@@ -53,6 +79,7 @@ const FormCurso = () => {
       });
       const data = await res.json();
       if (res.status === 200) {
+        await logCurso("INSERT", data.createdAt, data);
         route.push("/courses/curso");
         route.refresh();
       }
@@ -82,6 +109,7 @@ const FormCurso = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        await logCruso("UPDATE", data.updatedAt, data);
         route.push("/courses/curso");
         route.refresh();
       }
@@ -96,8 +124,12 @@ const FormCurso = () => {
         const res = await fetch(`/api/courses/curso/${params.id}`, {
           method: "DELETE",
         });
-        route.push("/courses/curso");
-        route.refresh();
+        const data = await res.json();
+        if (res.ok) {
+          await logCurso("DELETE", new Date(), data);
+          route.push("/courses/curso");
+          route.refresh();
+        }
       } catch (error) {
         console.log(error);
       }
@@ -106,7 +138,7 @@ const FormCurso = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if(file === undefined) setImg('/noavatar.png')
+    if (file === undefined) setImg("/noavatar.png");
     if (file) setImg(URL.createObjectURL(file));
   };
 

@@ -7,11 +7,14 @@ import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { formatDate } from "@/utils/date";
 import { bolivianDepartments, departmentData } from "@/utils/data";
+import { useSession } from "next-auth/react";
+import Loader from "@/ui/loader/loader";
 
 const FormKardex = () => {
   const params = useParams();
   const route = useRouter();
   const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
   const {
     register,
     handleSubmit,
@@ -103,6 +106,30 @@ const FormKardex = () => {
     }
   };
 
+  const logKardex = async (type, date, object) => {
+    try {
+      if (status === "authenticated") {
+        const { img, fullname, role, status } = session.user;
+        const res = await fetch("/api/cpa/log", {
+          method: "POST",
+          body: JSON.stringify({
+            modifiedByUser: { img, name: fullname, role, status },
+            operationType: type,
+            where: "KARDEX",
+            modifiedDate: date,
+            modifiedObject: object,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createKardex = async (kardex) => {
     setLoading(true);
     const formData = new FormData();
@@ -126,6 +153,7 @@ const FormKardex = () => {
       });
       const data = await res.json();
       if (res.status === 200) {
+        await logKardex("INSERT", data.createdAt, data);
         setLoading(false);
         route.push("/academic/students");
         route.refresh();
@@ -158,6 +186,7 @@ const FormKardex = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        await logKardex("UPDATE", data.updatedAt, data);
         route.push("/academic/students");
         route.refresh();
       }
@@ -172,7 +201,9 @@ const FormKardex = () => {
         const res = await fetch(`/api/academic/kardex/${params.id}`, {
           method: "DELETE",
         });
+        const data = await res.json();
         if (res.ok) {
+          await logKardex("DELETE", new Date(), data);
           route.push("/academic/students");
           route.refresh();
         }
@@ -1270,10 +1301,7 @@ const FormKardex = () => {
             </Link>
           </div>
         </form>
-        {loading && <div>Cargando, por favor espere...</div>}
-        <div>
-          <pre>{JSON.stringify(watch(), null, 2)}</pre>
-        </div>
+        {loading && <Loader />}
       </div>
     </div>
   );

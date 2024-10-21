@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import Loader from "@/ui/loader/loader";
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
@@ -54,7 +55,7 @@ const LoginPage = () => {
     <div className={styles.container}>
       <form onSubmit={onSubmit} className={styles.form} noValidate>
         {error && <span>{error}</span>}
-        {loading && <div>Cargando, por favor espere...</div>}
+        {loading && <Loader />}
         <p>Inicio de Sesión</p>
         <input
           type="email"
