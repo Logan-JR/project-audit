@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Loader from "@/ui/loader/loader";
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
@@ -54,47 +53,63 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <form onSubmit={onSubmit} className={styles.form} noValidate>
-        {error && <span>{error}</span>}
-        {loading && <Loader />}
-        <p>Inicio de Sesión</p>
-        <input
-          type="email"
-          placeholder="correo"
-          {...register("email", {
-            required: {
-              value: true,
-              message: "El correo es requerido",
-            },
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$/,
-              message: "El correo no es valido",
-            },
-            onChange: handlerChange,
-          })}
-        />
-        {errors.email && (
-          <span className={styles.error}>{errors.email.message}</span>
-        )}
-        <input
-          type="password"
-          placeholder="********"
-          {...register("password", {
-            required: {
-              value: true,
-              message: "Ingrese su contraseña",
-            },
-            minLength: {
-              value: 8,
-              message: "Contraseña demasiada corta",
-            },
-            onChange: handlerChange,
-          })}
-        />
-        {errors.password && (
-          <span className={styles.error}>{errors.password.message}</span>
-        )}
-        <button>Login</button>
-        <Link className={styles.home} href={"/"}>
+        <h2 className={styles.title}>Inicio de Sesión</h2>
+        <div className={styles.inputContainer}>
+          <input
+            className={styles.input}
+            type="email"
+            placeholder="Correo"
+            {...register("email", {
+              required: {
+                value: true,
+                message: "Este campo es requerido",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,}$/,
+                message: "El correo no es valido",
+              },
+              onChange: handlerChange,
+            })}
+          />
+          {errors.email && (
+            <span className={styles.errorText}>{errors.email.message}</span>
+          )}
+        </div>
+        <div className={styles.inputContainer}>
+          <input
+            className={styles.input}
+            type="password"
+            placeholder="Contraseña"
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Este campo es requerido",
+              },
+              minLength: {
+                value: 8,
+                message: "Contraseña demasiada corta",
+              },
+              onChange: handlerChange,
+            })}
+          />
+          {errors.password && (
+            <p className={styles.errorText}>{errors.password.message}</p>
+          )}
+        </div>
+        <button
+          className={`${styles.button} ${loading ? styles.buttonLoading : ""}`}
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className={styles.loader}></span>
+            </>
+          ) : (
+            "Iniciar Sesión"
+          )}
+        </button>
+        {error && <span style={{display: "flex", justifyContent: "center"}} className={styles.error}>{error}</span>}
+        <Link className={styles.link} href={"/"}>
           Ir al inicio
         </Link>
       </form>
