@@ -26,6 +26,7 @@
   border-radius: 10px;
   margin: 0 10px;
   flex-shrink: 0;
+  z-index: -1;
 }
 
 .image {
@@ -49,7 +50,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   position: relative;
-  /* padding-bottom: .5rem; */
   padding: 0 10px;
 }
 
@@ -60,11 +60,11 @@
   font-size: 3em;
   cursor: pointer;
   transform: translateY(-50%);
-  z-index: 1;
 }
 
 .postTitle {
   position: relative;
   text-align: center;
   bottom: -50px;
+  z-index: -1;
 }

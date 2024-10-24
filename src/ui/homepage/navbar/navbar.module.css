@@ -9,7 +9,7 @@
   position: absolute;
   width: 100%;
   top: 0;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .navSection {
@@ -33,7 +33,6 @@
 }
 
 .navItem:hover {
-  font-weight: 600;
   background-color: rgb(24, 34, 55);
   color: white;
 }
