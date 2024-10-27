@@ -1,83 +1,230 @@
-.container {
-  display: flex;
-  gap: 50px;
-  margin-top: 20px;
-}
-
-.infoContainer {
-  flex: 1;
-  background-color: var(--bgSoft);
-  padding: 20px;
-  border-radius: 10px;
-  font-weight: bold;
-  color: var(--textSoft);
-  height: max-content;
-}
-
-.imgContainer {
-  width: 100%;
-  height: 300px;
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
 .formContainer {
-  flex: 3;
-  background-color: var(--bgSoft);
-  padding: 20px;
-  border-radius: 10px;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1e2029;
 }
 
-.form {
+.card {
+  background-color: #252a37;
+  border-radius: 8px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.cardTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+}
+
+.cardDescription {
+  color: #ffffff;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.card form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.formGroup {
   display: flex;
   flex-direction: column;
 }
 
-.form input,
-.form select {
-  padding: 20px;
-  border: 2px solid #2e374a;
-  border-radius: 5px;
-  background-color: var(--bg);
-  color: var(--text);
-  margin: 10px 0px;
+.formGroup label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
-.form label {
-  font-size: 12px;
+.formGroup input,
+.formGroup select {
+  padding: 0.75rem;
+  background-color: #3a3f50;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #ffffff;
+  transition: border-color 0.3s ease;
 }
 
-.form button {
-  width: 100px;
-  margin-right: 15px;
-  padding: 15px;
-  background-color: teal;
-  color: var(--text);
+.formGroup input::placeholder,
+.formGroup select::placeholder {
+  color: #ffffff;
+  opacity: 0.6;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #40babd;
+}
+
+.formGroup input.error,
+.formGroup select.error {
+  border-color: #ff4d4f;
+}
+
+.errorMessage {
+  color: #ff4d4f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.submitButton {
+  grid-column: 1 / -1;
+  background-color: #40babd;
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
-.form span {
-  color: white;
-  background-color: crimson;
-  font-size: 14px;
-  margin-top: 5px;
+.submitButton:hover {
+  background-color: #3aa7aa;
+}
+
+.footerLink {
+  grid-column: 1 / -1;
   text-align: center;
-  /* width: 250px; */
-  padding: 3px 7px;
-  border-radius: 5px;
-  margin-bottom: 4px;
+  margin-top: 1rem;
 }
 
-.names {
+.footerLink a {
+  color: #40babd;
+  text-decoration: none;
+}
+
+.footerLink a:hover {
+  text-decoration: underline;
+}
+
+.coursePreview {
+  grid-column: 1 / -1;
+  background-color: #3a3f50;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
   display: flex;
-  gap: 15px;
+  flex-direction: column;
 }
 
-.delete {
-  background-color: crimson !important;
+@media (min-width: 768px) {
+  .coursePreview {
+    flex-direction: row;
+  }
+}
+
+.coursePreviewImage {
+  flex: 0 0 auto;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .coursePreviewImage {
+    margin-bottom: 0;
+  }
+}
+
+.coursePreviewImage img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.coursePreviewContent {
+  flex: 1;
+}
+
+.coursePreview h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.coursePreview p {
+  color: #ffffff;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.modalContent img {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #ffffff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.buttonLoading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loader {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

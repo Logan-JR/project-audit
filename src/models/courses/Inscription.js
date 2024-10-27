@@ -9,27 +9,37 @@ const inscriptionSchema = new Schema(
       unique: true,
       trim: true,
     },
-    name: {
+    nombre: {
       type: String,
       required: true,
       trim: true,
     },
     paterno: {
       type: String,
-      required: true,
       trim: true,
     },
     materno: {
       type: String,
       trim: true,
     },
-    email: {
+    correo: {
       type: String,
-      required: true,
       unique: true,
+      trim: true,
     },
-    course: {
-      type: [cursoSchema],
+    celular: {
+      type: String,
+      trim: true,
+    },
+    grado: {
+      type: String,
+      trim: true,
+    },
+    confirmado: {
+      type: Boolean,
+    },
+    curso: {
+      type: cursoSchema,
       required: true,
     },
   },

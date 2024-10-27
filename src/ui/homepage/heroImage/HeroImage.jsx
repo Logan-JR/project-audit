@@ -1,5 +1,6 @@
 import styles from "@/ui/homepage/heroImage/heroImage.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeroImage = () => {
   return (
@@ -11,7 +12,9 @@ const HeroImage = () => {
           <p className={styles.subtitle}>
             Honestidad, capacidad y sabiduria... Adelante Auditoria!!!
           </p>
-          <button className={styles.btnHero}>Inscribirse</button>
+          <Link href={"/form"}>
+            <button className={styles.btnHero}>Inscribirse</button>
+          </Link>
         </div>
         <div className={styles.cardsContainer}>
           <div className={styles.card}>

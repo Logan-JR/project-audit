@@ -109,7 +109,7 @@ const FormCurso = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        await logCruso("UPDATE", data.updatedAt, data);
+        await logCurso("UPDATE", data.updatedAt, data);
         route.push("/courses/curso");
         route.refresh();
       }
