@@ -5,6 +5,7 @@ import Log from "@/models/cpa/Log";
 import Curso from "@/models/courses/Curso";
 import Inscription from "@/models/courses/Inscription";
 import Post from "@/models/cpa/Post";
+import Gallery from "@/models/cpa/Gallery";
 
 export const loadUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
@@ -110,6 +111,25 @@ export const loadPost = async (q, page) => {
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
     return { count, post };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const loadGallery = async (q, page) => {
+  const regex = new RegExp(q, "i");
+  const ITEM_PER_PAGE = 10;
+  try {
+    connectDB();
+    const count = await Gallery.find({
+      detail: { $regex: regex },
+    }).count();
+    const gallery = await Gallery.find({
+      detail: { $regex: regex },
+    })
+      .limit(ITEM_PER_PAGE)
+      .skip(ITEM_PER_PAGE * (page - 1));
+    return { count, gallery };
   } catch (error) {
     console.log(error);
   }

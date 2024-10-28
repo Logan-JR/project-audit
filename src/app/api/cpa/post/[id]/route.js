@@ -33,13 +33,13 @@ export const PUT = async (request, { params }) => {
       typeof parsedData.img[0] !== "string" &&
       typeof parsedData.img[0] !== "undefined"
     ) {
-      parsedData.img = await createFile(parsedData.img[0], "/image");
+      parsedData.img = await createFile(parsedData.img[0], "image/post");
     }
     if (
       typeof parsedData.file[0] !== "string" &&
       typeof parsedData.file[0] !== "undefined"
     ) {
-      parsedData.file = await createFile(parsedData.file[0], "/pdf");
+      parsedData.file = await createFile(parsedData.file[0], "pdf/post");
     }
     if (typeof parsedData.img[0] === "undefined") parsedData.img = "";
     if (typeof parsedData.file[0] === "undefined") parsedData.file = "";

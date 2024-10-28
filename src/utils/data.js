@@ -25,6 +25,11 @@ export const menuAdmin = [
         icon: <MdSupervisedUserCircle />,
       },
       {
+        title: "Gallery",
+        path: "/cpa/gallery",
+        icon: <MdDashboard />,
+      },
+      {
         title: "Publicaciones",
         path: "/cpa/post",
         icon: <MdLibraryBooks />,

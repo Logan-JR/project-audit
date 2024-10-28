@@ -24,7 +24,6 @@ const InscriptionPage = async ({ searchParams }) => {
             <td>CI</td>
             <td>Nombre</td>
             <td>Curso</td>
-            <td>Modulos</td>
             <td>Correo</td>
             <td>Fecha Inscripcion</td>
           </tr>
@@ -37,8 +36,9 @@ const InscriptionPage = async ({ searchParams }) => {
               </td>
               <td
                 className={styles.nameCap}
-              >{`${item.name} ${item.paterno} ${item.materno}`}</td>
-              <td>{item.email}</td>
+              >{`${item.nombre} ${item.paterno} ${item.materno}`}</td>
+              <td>{item.curso.title}</td>
+              <td>{item.correo}</td>
               <td>{item.createdAt.toLocaleDateString()}</td>
               <td>
                 <div className={styles.buttons}>

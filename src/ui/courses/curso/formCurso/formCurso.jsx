@@ -31,6 +31,7 @@ const FormCurso = () => {
       academicHours: data.academicHours,
       hour: data.hour,
       flyer: data.flyer,
+      costo: data.costo,
     });
   };
 
@@ -173,6 +174,12 @@ const FormCurso = () => {
                     value: true,
                     message: "El nombre es requerido",
                   },
+                  pattern: {
+                    value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/,
+                    message: "Caracter no valido",
+                  },
+                  validate: (value) =>
+                    value.trim() !== "" || "No puede ser solo espacios vacíos",
                 })}
               />
               {errors.title && <span>{errors.title.message}</span>}
@@ -186,6 +193,12 @@ const FormCurso = () => {
                     value: false,
                     message: "El detail es requerido",
                   },
+                  pattern: {
+                    value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ.,\s]+$/,
+                    message: "Caracter no valido",
+                  },
+                  validate: (value) =>
+                    value.trim() !== "" || "No puede ser solo espacios vacíos",
                 })}
               />
               {errors.detail && <span>{errors.detail.message}</span>}
@@ -198,6 +211,14 @@ const FormCurso = () => {
                   required: {
                     value: true,
                     message: "Ingrese una fecha",
+                  },
+                  validate: (value) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const selectedDate = new Date(value);
+                    return (
+                      selectedDate >= today || "Ingrese una fecha valida futura"
+                    );
                   },
                 })}
               />
@@ -212,6 +233,10 @@ const FormCurso = () => {
                     value: true,
                     message: "Ingrese la hora de inicio",
                   },
+                  pattern: {
+                    value: /^(0[1-9]|1[0-2]):[0-5][0-9](am|pm)$/i,
+                    message: "Formato invalido. Ej: 09:59am, 03:30pm",
+                  },
                 })}
               />
               {errors.hour && <span>{errors.hour.message}</span>}
@@ -225,11 +250,32 @@ const FormCurso = () => {
                     value: true,
                     message: "Ingrese las horas academicas",
                   },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Ingrese un numero valido",
+                  },
                 })}
               />
               {errors.academicHours && (
                 <span>{errors.academicHours.message}</span>
               )}
+            </div>
+            <div className={styles.form}>
+              <label>Precio</label>
+              <input
+                type="text"
+                {...register("costo", {
+                  required: {
+                    value: true,
+                    message: "Ingrese el precio",
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Caracter no valido",
+                  },
+                })}
+              />
+              {errors.costo && <span>{errors.costo.message}</span>}
             </div>
             <div className={styles.form}>
               <label>Afiche</label>

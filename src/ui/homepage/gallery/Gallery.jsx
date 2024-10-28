@@ -1,39 +1,19 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "@/ui/homepage/gallery/gallery.module.css";
 
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [images, setImages] = useState([]);
 
-  const images = [
-    { src: "/gallery/img-01.jpg", alt: "Imagen 1" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 2" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 3" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 4" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 5" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 6" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 7" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 8" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 9" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 10" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 11" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 12" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 7" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 8" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 9" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 10" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 11" },
-    { src: "/gallery/img-05.jpg", alt: "Imagen 11" },
-    { src: "/gallery/img-03.jpg", alt: "Imagen 7" },
-    { src: "/gallery/img-02.jpg", alt: "Imagen 8" },
-    { src: "/gallery/img-01.jpg", alt: "Imagen 9" },
-    { src: "/gallery/img-06.jpg", alt: "Imagen 10" },
-    { src: "/gallery/img-05.jpg", alt: "Imagen 11" },
-    { src: "/gallery/img-04.jpg", alt: "Imagen 11" },
-  ];
+  const loadGallery = async () => {
+    const res = await fetch("/api/cpa/gallery");
+    const data = await res.json();
+    setImages(data);
+  };
 
   const imagesPerPage = 12;
   const totalPages = Math.ceil(images.length / imagesPerPage);
@@ -50,6 +30,10 @@ export default function Gallery() {
     currentPage * imagesPerPage,
     (currentPage + 1) * imagesPerPage
   );
+
+  useEffect(() => {
+    loadGallery();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -75,8 +59,8 @@ export default function Gallery() {
                   onClick={() => setSelectedImage(image)}
                 >
                   <motion.img
-                    src={image.src}
-                    alt={image.alt}
+                    src={image.img}
+                    alt={image.detail}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
@@ -127,8 +111,8 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={selectedImage.src}
-                alt={selectedImage.alt}
+                src={selectedImage.img}
+                alt={selectedImage.detail}
                 width={900}
                 height={100}
                 className={styles.imagen}
