@@ -1,7 +1,9 @@
 
 const PageCourses = () => {
   return (
-    <div>CoursesDashboard</div>
+    <>
+      {/* <div>CoursesDashboard</div> */}
+    </>
   )
 }
 

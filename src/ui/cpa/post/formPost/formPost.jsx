@@ -117,7 +117,7 @@ const FormPost = () => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
+    if (window.confirm("Estas seguro de eliminar esta publicación?")) {
       try {
         const res = await fetch(`/api/cpa/post/${params.id}`, {
           method: "DELETE",
@@ -187,10 +187,6 @@ const FormPost = () => {
                 value: 3,
                 message: "El titulo ingresado es demasiado corto",
               },
-              maxLength: {
-                value: 40,
-                message: "El titulo es demasiado largo",
-              },
             })}
           />
           {errors.title && <span>{errors.title.message}</span>}
@@ -202,10 +198,6 @@ const FormPost = () => {
                 value: 3,
                 message: "El detalle ingresado es demasiado corto",
               },
-              maxLength: {
-                value: 40,
-                message: "El detalle es demasiado largo",
-              },
             })}
           />
           {errors.detail && <span>{errors.detail.message}</span>}
@@ -215,7 +207,7 @@ const FormPost = () => {
             accept="image/*"
             {...register("img", {
               required: {
-                value: image != '' ? true : false,
+                value: image != "" ? true : false,
                 message: "La imagen es requerida",
               },
               onChange: handleImage,

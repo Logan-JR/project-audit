@@ -175,7 +175,7 @@ const FormCurso = () => {
                     message: "El nombre es requerido",
                   },
                   pattern: {
-                    value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/,
+                    value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ.,\s]+$/,
                     message: "Caracter no valido",
                   },
                   validate: (value) =>

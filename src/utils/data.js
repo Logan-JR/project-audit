@@ -1,13 +1,12 @@
 import {
   MdDashboard,
   MdSupervisedUserCircle,
-  MdShoppingBag,
-  MdAttachMoney,
   MdAnalytics,
   MdOutlineSettings,
   MdHelpCenter,
   MdLibraryBooks,
   MdStorage,
+  MdOutlineContentPaste,
 } from "react-icons/md";
 
 export const menuAdmin = [
@@ -47,15 +46,15 @@ export const menuAdmin = [
     ],
   },
   {
-    title: "More",
+    title: "Más",
     list: [
       {
-        title: "Settings",
+        title: "Configuración",
         path: "",
         icon: <MdOutlineSettings />,
       },
       {
-        title: "Help",
+        title: "Ayuda",
         path: "",
         icon: <MdHelpCenter />,
       },
@@ -77,24 +76,19 @@ export const menuAcademic = [
         path: "/academic/students",
         icon: <MdSupervisedUserCircle />,
       },
-      {
-        title: "Reports",
-        path: "",
-        icon: <MdAnalytics />,
-      },
     ],
   },
   {
-    title: "User",
+    title: "Más",
     list: [
       {
-        title: "Settings",
-        path: "/dashboard/settings",
+        title: "Configuración",
+        path: "",
         icon: <MdOutlineSettings />,
       },
       {
-        title: "Help",
-        path: "/dashboard/help",
+        title: "Ayuda",
+        path: "",
         icon: <MdHelpCenter />,
       },
     ],
@@ -118,26 +112,21 @@ export const menuCourses = [
       {
         title: "Inscripciones",
         path: "/courses/inscription",
-        icon: <MdShoppingBag />,
-      },
-      {
-        title: "Transactions",
-        path: "",
-        icon: <MdAttachMoney />,
+        icon: <MdOutlineContentPaste />,
       },
     ],
   },
   {
-    title: "User",
+    title: "Más",
     list: [
       {
-        title: "Settings",
-        path: "/dashboard/settings",
+        title: "Configuración",
+        path: "",
         icon: <MdOutlineSettings />,
       },
       {
-        title: "Help",
-        path: "/dashboard/help",
+        title: "Ayuda",
+        path: "",
         icon: <MdHelpCenter />,
       },
     ],

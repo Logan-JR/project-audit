@@ -26,7 +26,16 @@ export default function FormInscription() {
     try {
       const res = await fetch("/api/courses/curso");
       const data = await res.json();
-      setCourses(data);
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() - 1);
+      currentDate.setHours(0, 0, 0, 0);
+
+      const validCourses = data.filter((course) => {
+        const startDate = new Date(course.startDate);
+        startDate.setHours(0, 0, 0, 0);
+        return startDate >= currentDate;
+      });
+      setCourses(validCourses);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +91,7 @@ export default function FormInscription() {
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Formulario de Registro</h2>
           <p className={styles.cardDescription}>
-            Por favor, completa todos los campos del formulario.
+            Por favor, completa los campos del formulario.
           </p>
         </div>
         <form onSubmit={onSubmit}>

@@ -74,6 +74,10 @@
   background-color: crimson;
 }
 
+.delete:hover {
+  background-color: rgba(220, 20, 60, 0.7);
+}
+
 .addButton:hover {
   background-color: teal;
 }

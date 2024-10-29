@@ -1,79 +1,79 @@
 "use client";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import styles from "./cardsection.module.css";
 import Image from "next/image";
-import styles from "@/ui/homepage/cardSection/cardsection.module.css";
-
-const publications = [
-  {
-    title: "Publicación 1",
-    text: "Esta es la descripción de la primera publicación. Es algo larga para probar el truncado de texto.",
-    image: "/post-01.jpg",
-  },
-  {
-    title: "Publicación 2 Descripción de la segunda publicación.",
-    text: "Descripción de la segunda publicación.",
-    image: "/post-02.jpg",
-  },
-  {
-    title: "Publicación 3",
-    text: "Descripción de la tercera publicación.",
-    image: "/post-03.jpg",
-  },
-  {
-    title: "Publicación 4",
-    text: "Descripción de la cuarta publicación.",
-    image: "/post-01.jpg",
-  },
-  {
-    title: "Publicación 5",
-    text: "Descripción de la quinta publicación.",
-    image: "/post-01.jpg",
-  },
-];
+import Link from "next/link";
 
 const CardSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState([]);
+
+  const loadImages = async () => {
+    const res = await fetch("/api/cpa/post");
+    const data = await res.json();
+    console.log(data);
+    setImages(data);
+  };
 
   const nextSlide = () => {
-    if (currentIndex < publications.length - 3) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   const prevSlide = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
   };
+
+  useEffect(() => {
+    loadImages();
+  }, []);
+
   return (
-    <>
-      <h2 className={styles.postTitle}>Publicaciones</h2>
-      <div className={styles.slider}>
-        <button onClick={prevSlide} className={styles.arrow}>
-          ❮
-        </button>
-        <div className={styles.sliderContent}>
-          {publications
-            .slice(currentIndex, currentIndex + 3)
-            .map((pub, index) => (
-              <div key={index} className={styles.slide}>
-                <Image
-                  src={pub.image}
-                  alt={pub.title}
-                  className={styles.image}
-                  width={200}
-                  height={300}
-                  unoptimized
-                />
-                <p className={styles.title}>{pub.title}</p>
-              </div>
-            ))}
-        </div>
-        <button onClick={nextSlide} className={styles.arrow}>
-          ❯
-        </button>
+    <div className={styles.carrusel}>
+      <div
+        className={styles.carruselInner}
+        style={{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }}
+      >
+        {images.map((image) => (
+          <div key={image._id} className={styles.card}>
+            <Image
+              src={image.img}
+              alt={image.detail}
+              className={styles.image}
+              width={1200}
+              height={1200}
+            />
+            <div className={styles.cardContent}>
+              <h3 className={styles.title}>{image.title}</h3>
+              <p className={styles.description}>{image.detail}</p>
+              <Link href={image.file} target="_blank">
+                <button
+                  className={`${styles.pdf} ${
+                    !image.file.trim() ? styles.error : ""
+                  }`}
+                  disabled={!image.file.trim()}
+                >
+                  PDF
+                </button>
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
-    </>
+      <button
+        onClick={prevSlide}
+        className={`${styles.button} ${styles.prevButton}`}
+      >
+        &#10094;
+      </button>
+      <button
+        onClick={nextSlide}
+        className={`${styles.button} ${styles.nextButton}`}
+      >
+        &#10095;
+      </button>
+    </div>
   );
 };
 

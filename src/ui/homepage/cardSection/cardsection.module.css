@@ -1,70 +1,105 @@
-.slider {
+.carrusel {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  margin: 60px 0;
+  height: 100vh;
 }
 
-.sliderContent {
+.carruselInner {
   display: flex;
-  justify-content: space-between;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.5s ease;
 }
 
-.slide {
-  display: flex;
-  flex-direction: column;
-  width: 330px;
-  box-sizing: border-box;
-  padding: 10px 0px;
-  gap: 5px;
-  background: var(--bgSoft);
-  color: white;
-  border-radius: 10px;
+.card {
+  flex: 0 0 calc(33.333% - 20px);
+  max-width: calc(33.333% - 20px);
   margin: 0 10px;
-  flex-shrink: 0;
-  z-index: -1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .image {
-  object-fit: cover;
   width: 100%;
-  height: 480px;
-  border-radius: 10px;
+  height: 60vh;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.cardContent {
+  padding: 15px;
+  background-color: #182237;
+  transition: background-color 0.3s ease;
+}
+
+.card:hover .cardContent {
+  background-color: #182237;
 }
 
 .title {
+  font-size: 18px;
   font-weight: bold;
-  font-size: 1.1rem;
-  text-align: center;
-  margin: 10px 0;
-  padding: 0 10px;
+  margin-bottom: 5px;
 }
 
-.text {
-  max-height: 50px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  position: relative;
-  padding: 0 10px;
+.description {
+  font-size: 14px;
+  color: #fff;
 }
 
-.arrow {
-  color: white;
-  background: none;
-  border: none;
-  font-size: 3em;
-  cursor: pointer;
+.button {
+  position: absolute;
+  top: 50%;
   transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.postTitle {
-  position: relative;
-  text-align: center;
-  bottom: -50px;
-  z-index: -1;
+.button:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.prevButton {
+  left: 10px;
+}
+
+.nextButton {
+  right: 10px;
+}
+
+.pdf {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  margin-top: 10px;
+  background-color: #319795;
+  color: #fff;
+  cursor: pointer;
+}
+
+.error {
+  background-color: #e03d3d;
+  cursor: not-allowed;
 }

@@ -3,7 +3,7 @@ import Chart from "@/ui/dashboard/chart/chart";
 const AcademicDashboard = () => {
   return (
     <div>
-      <h3>AcademicDashboard</h3>
+      <h2>Reportes</h2>
       <Chart />
     </div>
   );

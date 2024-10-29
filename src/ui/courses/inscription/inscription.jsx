@@ -3,6 +3,7 @@ import Search from "@/ui/dashboard/search/search";
 import Pagination from "@/ui/dashboard/pagination/pagination";
 import styles from "@/ui/courses/inscription/inscription.module.css";
 import { loadInscription } from "@/libs/data";
+import Confirmar from "./confirmar";
 
 const InscriptionPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
@@ -12,11 +13,11 @@ const InscriptionPage = async ({ searchParams }) => {
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Buscar CI" />
-        <div className={styles.containerBtn}>
+        {/* <div className={styles.containerBtn}>
           <Link href="/courses/inscription/add">
             <button className={styles.addButton}>Agregar nuevo</button>
           </Link>
-        </div>
+        </div> */}
       </div>
       <table className={styles.table}>
         <thead>
@@ -30,31 +31,7 @@ const InscriptionPage = async ({ searchParams }) => {
         </thead>
         <tbody>
           {inscription.map((item) => (
-            <tr key={item._id}>
-              <td>
-                <div className={styles.user}>{item.ci}</div>
-              </td>
-              <td
-                className={styles.nameCap}
-              >{`${item.nombre} ${item.paterno} ${item.materno}`}</td>
-              <td>{item.curso.title}</td>
-              <td>{item.correo}</td>
-              <td>{item.createdAt.toLocaleDateString()}</td>
-              <td>
-                <div className={styles.buttons}>
-                  <Link href={`/courses/inscription/${item.id}`}>
-                    <button className={`${styles.button} ${styles.view}`}>
-                      Detalle
-                    </button>
-                  </Link>
-                  <Link href={`/courses/inscription`}>
-                    <button className={`${styles.button} ${styles.view}`}>
-                      Confirmar
-                    </button>
-                  </Link>
-                </div>
-              </td>
-            </tr>
+            <Confirmar item={item} key={item._id} />
           ))}
         </tbody>
       </table>
