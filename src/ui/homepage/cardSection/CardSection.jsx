@@ -11,7 +11,6 @@ const CardSection = () => {
   const loadImages = async () => {
     const res = await fetch("/api/cpa/post");
     const data = await res.json();
-    console.log(data);
     setImages(data);
   };
 

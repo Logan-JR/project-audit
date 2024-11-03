@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import styles from "./navbar.module.css";
 import {
   MdNotifications,
@@ -24,7 +25,9 @@ const Navbar = () => {
         <div className={styles.icons}>
           <MdOutlineChat size={20} />
           <MdNotifications size={20} />
-          <MdPublic size={20} />
+          <Link href={"/"}>
+            <MdPublic size={20} />
+          </Link>
         </div>
       </div>
     </div>

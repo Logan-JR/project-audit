@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/ui/homepage/navbar/navbar.module.css";
+import Sesion from '../sesion/sesion'
 
 const Navbar = () => {
   return (
@@ -39,7 +40,7 @@ const Navbar = () => {
             <Link href={""}>Contacto</Link>
           </li>
           <li className={styles.navItem}>
-            <Link href={"/login"}>Iniciar Sesión</Link>
+            <Sesion />
           </li>
         </ul>
       </div>
