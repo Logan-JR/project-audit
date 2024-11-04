@@ -19,6 +19,11 @@ const Confirmar = ({ item }) => {
     );
     revalidatePath("/courses/inscription");
   };
+  const getRecibo = async (formData) => {
+    "use server";
+    const id = formData.get("itemId")?.toString();
+    // console.log("ID para el recibo", id);
+  };
   return (
     <tr>
       <td>
@@ -43,6 +48,17 @@ const Confirmar = ({ item }) => {
               {item.confirmado ? "Confirmado" : "Confirmar?"}
             </button>
           </form>
+          {item.confirmado && (
+            <form action={getRecibo}>
+              <input type="hidden" name="itemId" value={String(item._id)} />
+              <button
+                type="submit"
+                className={`${styles.button} ${styles.view}`}
+              >
+                Recibo
+              </button>
+            </form>
+          )}
         </div>
       </td>
     </tr>

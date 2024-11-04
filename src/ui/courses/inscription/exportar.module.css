@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #182237;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #182237;
+  background-color: #151c2c;
+  color: white;
+}
+
+.footer {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.button {
+  background-color: teal;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #5d57c9;
+}
+
+@media (max-width: 600px) {
+  .card {
+    max-width: 100%;
+  }
+}

@@ -13,11 +13,11 @@ const InscriptionPage = async ({ searchParams }) => {
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Buscar CI" />
-        {/* <div className={styles.containerBtn}>
-          <Link href="/courses/inscription/add">
-            <button className={styles.addButton}>Agregar nuevo</button>
+        <div className={styles.containerBtn}>
+          <Link href="/courses/inscription/export">
+            <button className={styles.addButton}>Exportar</button>
           </Link>
-        </div> */}
+        </div>
       </div>
       <table className={styles.table}>
         <thead>
