@@ -1,63 +1,72 @@
 "use client";
-
-import styles from "./chart.module.css";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "Ene",
-    inscritos: 4000,
-    abandono: 2400,
-  },
-  {
-    name: "Feb",
-    inscritos: 3000,
-    abandono: 1398,
-  },
-  {
-    name: "Mar",
-    inscritos: 2000,
-    abandono: 3800,
-  },
-  {
-    name: "Abr",
-    inscritos: 2780,
-    abandono: 3908,
-  },
-  {
-    name: "May",
-    inscritos: 1890,
-    abandono: 4800,
-  },
-  {
-    name: "Jun",
-    inscritos: 2390,
-    abandono: 3800,
-  },
-  {
-    name: "Jul",
-    inscritos: 3490,
-    abandono: 4300,
-  },
-];
+export default function GraficoVentas() {
+  const [datosMensuales, setDatosMensuales] = useState([]);
+  const [totalKardex, setTotalKardex] = useState(0);
 
-const Chart = () => {
+  const getKardex = async () => {
+    try {
+      const res = await fetch("/api/academic/kardex");
+      const data = await res.json();
+
+      const meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+
+      const kardexPorMes = meses.reduce((acc, mes) => {
+        acc[mes] = 0;
+        return acc;
+      }, {});
+
+      data.forEach((item) => {
+        const createdAt = new Date(item.createdAt);
+        const mes = meses[createdAt.getMonth()];
+        kardexPorMes[mes] += 1;
+      });
+      const datosFormateados = meses.map((mes) => ({
+        mes,
+        "Kardex Academicos": kardexPorMes[mes],
+      }));
+      const total = data.length;
+      setDatosMensuales(datosFormateados);
+      setTotalKardex(total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getKardex();
+  }, []);
+
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Reporte de Estudiantes</h2>
-      <ResponsiveContainer width="100%" height="90%">
+    <div style={{ width: "100%", height: 400 }}>
+      <h3>Gráfico de Kardex Academicos</h3>
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={500}
-          height={300}
-          data={data}
+          data={datosMensuales}
           margin={{
             top: 5,
             right: 30,
@@ -65,26 +74,24 @@ const Chart = () => {
             bottom: 5,
           }}
         >
-          <XAxis dataKey="name" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="mes" />
           <YAxis />
-          <Tooltip contentStyle={{ background: "#151c2c", border: "none" }} />
+          <Tooltip />
           <Legend />
           <Line
             type="monotone"
-            dataKey="inscritos"
+            dataKey="Kardex Academicos"
             stroke="#8884d8"
-            strokeDasharray="5 5"
+            activeDot={{ r: 8 }}
           />
           <Line
             type="monotone"
-            dataKey="abandono"
+            dataKey={`Total: ${totalKardex}`}
             stroke="#82ca9d"
-            strokeDasharray="3 4 5 2"
           />
         </LineChart>
       </ResponsiveContainer>
     </div>
   );
-};
-
-export default Chart;
+}
