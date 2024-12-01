@@ -2,6 +2,7 @@ import { connectDB } from "@/libs/database";
 import Inscription from "@/models/courses/Inscription";
 import styles from "@/ui/courses/inscription/inscription.module.css";
 import { revalidatePath } from "next/cache";
+import PDFkit from "./pdfkit";
 
 const Confirmar = ({ item }) => {
   const updateConfirmar = async (formData) => {
@@ -18,11 +19,6 @@ const Confirmar = ({ item }) => {
       }
     );
     revalidatePath("/courses/inscription");
-  };
-  const getRecibo = async (formData) => {
-    "use server";
-    const id = formData.get("itemId")?.toString();
-    // console.log("ID para el recibo", id);
   };
   return (
     <tr>
@@ -49,15 +45,7 @@ const Confirmar = ({ item }) => {
             </button>
           </form>
           {item.confirmado && (
-            <form action={getRecibo}>
-              <input type="hidden" name="itemId" value={String(item._id)} />
-              <button
-                type="submit"
-                className={`${styles.button} ${styles.view}`}
-              >
-                Recibo
-              </button>
-            </form>
+            <PDFkit ci={item._id} />
           )}
         </div>
       </td>
